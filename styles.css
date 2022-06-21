@@ -1,0 +1,143 @@
+#system-designer {
+    width: 100vw;
+    height: 100vh;
+    margin: auto;
+    position: relative;
+}
+
+#app-content {
+    width: 50vw;
+    height: 100vh;
+    margin: 0 auto;
+    position: relative;
+}
+
+.module {
+    overflow: auto;
+    width: 90%;
+    position: absolute;
+    left: 20px;
+    margin: 0 auto;
+}
+
+#module-kwh {
+    height: 15%;
+}
+
+#module-system-information {
+    height: 15%;
+    top: 190px;
+    display: none;
+}
+
+#solar-details {
+    position: absolute;
+    left: 224px;
+    top: 1px;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+}
+
+#tilt-azimuth {
+    display: none;
+    position: absolute;
+    top: 2px;
+    left: 256px;
+    height: 25px;
+}
+
+.angle {
+    display: inline-block;
+    margin-top: 0px;
+}
+
+#inverter-details {
+    position: absolute;
+    top: 35px;
+}
+
+#label-inverter-quantity {
+    margin-left: 5px;
+}
+
+#battery-details {
+    position: absolute;
+    top: 65px;
+}
+
+#label-battery-quantity {
+    margin-left: 5px;
+}
+
+#bill-form-group {
+    position: absolute;
+}
+
+#utility-api {
+    position: absolute;
+    right: 0px;
+    top: 40px;
+    height: 20px;
+    text-align: center;
+}
+
+#utility-results {
+    white-space: nowrap;
+    position: relative;
+    display: none;
+}
+
+.big-font {
+    font-size: 20px;
+}
+
+#solar-details-text {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    margin-top: 0px;
+    display: inline-block;
+}
+
+#average-electricity-text {
+    display: inline-block;
+}
+
+#output-options {
+    display: inline-block;
+
+}
+
+#residential-rate-inp {
+    display: inline-block;
+    width: 60px;
+
+}
+
+#kwh-slider {
+    position: absolute;
+    height: 16px;
+    top: 45px;
+    left: 295px;
+    width: 170px;
+}
+/* #zip-code {
+    display: inline;
+} */
+h1 {
+    text-align: center;
+    position: relative;
+}
+
+h2 {
+    position: relative;
+    left: 0px;
+}
+h3 {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    margin-top: 0px;
+}
+
