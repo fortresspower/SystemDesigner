@@ -30,6 +30,13 @@
     display: none;
 }
 
+#module-fortress-system {
+    height: 35%;
+    width: 100%;
+    top: 321px;
+    display: none;
+}
+
 #solar-details {
     position: absolute;
     left: 224px;
@@ -52,6 +59,9 @@
     margin-top: 0px;
 }
 
+#inp-tilt { width: 40px;}
+#inp-azimuth { width: 40px;}
+
 #inverter-details {
     position: absolute;
     top: 35px;
@@ -70,16 +80,31 @@
     margin-left: 5px;
 }
 
+#grid-details {
+    position: absolute;
+    top: 95px;
+}
+
 #bill-form-group {
     position: absolute;
 }
 
 #utility-api {
     position: absolute;
-    right: 0px;
-    top: 40px;
+    left: 500px;
+    top: 50px;
     height: 20px;
     text-align: center;
+    width: fit-content;
+    display:inline-block;
+}
+
+#solar-api {
+    position: absolute;
+    top: 180px;
+    left: 200px;
+    text-align: center;
+    width: fit-content;
 }
 
 #utility-results {
@@ -115,12 +140,66 @@
 
 }
 
+/* #kwh-slider::-webkit-slider-runnable-track {
+    background: #50646f;
+} */
+
 #kwh-slider {
     position: absolute;
     height: 16px;
     top: 45px;
     left: 295px;
     width: 170px;
+    accent-color: #6fcc87;
+}
+
+#solar-array-details {
+    position: absolute;
+    height: 70px;
+    top: 40px;
+}
+
+#solar-array-slider {
+    width: 200px;
+    accent-color: #6fcc87;
+    display:inline-block";
+}
+
+#solar-array-kws {
+    position: absolute;
+    top: 25px;
+    left: 290px;
+}
+
+#battery-system-details {
+    position: absolute;
+    height: 80px;
+    top: 100px;
+    width: 100%;
+}
+
+#battery-array-details {
+    position:absolute;
+    height: 70px;
+    top: 0px;
+    margin: 0 auto;
+}
+
+#battery-array-slider {
+    width: 200px;
+    accent-color: #6fcc87;
+    display:inline-block";
+}
+
+#battery-array-kwhs {
+    position: absolute;
+    left: 340px;
+    top: 20px;
+}
+
+#battery-system-text {
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 /* #zip-code {
     display: inline;

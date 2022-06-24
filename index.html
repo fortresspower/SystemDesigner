@@ -7,6 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>System Designer</title>
   <script src="script.js" type="module"></script>
+  <script src="listeners.js" type="module"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -59,20 +60,45 @@
               <option value="125"> 125 kW</option>
             </select>
             <label id = "label-inverter-quantity" for="inverter-quantity"> Enter the inverter amount: </label> 
-            <input id = "inverter-quantity" type="number" min = '0' style = 'width: 50px'>
+            <input id = "inverter-quantity" type="number" min = '0' value = "0" style = 'width: 50px'>
           </div>
           <div id="battery-details"> 
             <label for="battery-options">Choose a Fortress Battery model:</label> 
             <select id="battery-options">
               <option hidden disabled selected value> -- select an option -- </option>
-              <option value="eflex"> EFlex </option>
-              <option value="evaultmax"> eVault Max</option>
+              <option value="eFlex"> eFlex (5.4 kWh) </option>
+              <option value="eVault Max"> eVault Max (18.5 kWh) </option>
             </select>
             <label id = "label-battery-quantity" for="battery-quantity"> Enter the battery amount: </label> 
-            <input id = "battery-quantity" type="number" min = '0' style = 'width: 50px'>
+            <input id = "battery-quantity" type="number" min = '0' value = "0" style = 'width: 50px'>
+          </div>
+          <div id="grid-details">
+            <label for = "grid-options"> Is your system connected to the grid or not: </label>
+            <select id = "grid-options">
+              <option value = "offgrid"> On Grid </option> 
+              <option value = "offgrid"> Off Grid </option> 
+            </select>
           </div>
           
-          
+        </div>
+        <div class="module" id="module-fortress-system">
+          <h2> Your Fortress Battery/Solar System: </h2> 
+          <div class  = 'array-details' id = "solar-array-details">
+            <label class = 'big-font' id = "solar-array-label" for="solar-array-slider"> Enter solar array details: </label> 
+            <input id = "solar-array-slider" type="range" min = '0' step = '1' value="0">
+            <p class ="big-font" id = "solar-array-panels" style="display:inline-block"> 0 </p>
+            <p class="big-font" id = "solar-array-kws"> 0 kW</p>
+          </div>
+          <div id = "battery-system-details">
+            <div class = 'array-details' id = "battery-array-details">
+              <label class = 'big-font' id = "battery-array-label" for="battery-array-slider"> Fortress Battery system details: </label> 
+              <input id = "battery-array-slider" type="range" min = '0' step = '1' value="0" max = '20'>
+              <p class ="big-font" id = "battery-array-panels" style="display:inline-block"> 0 </p>
+              <p class="big-font" id = "battery-array-kwhs"> 0 kWh</p>
+              <!-- <p class="big-font" id = "battery-array-kws"> 0 kW</p> -->
+            </div>
+          </div>
+          <button type="button" id = "solar-api">Get System Data </button>
         </div>
 
 
