@@ -8,16 +8,18 @@
   <title>System Designer</title>
   <script src="script.js" type="module"></script>
   <script src="listeners.js" type="module"></script>
+  <script src="utilityRates-API.js" type="module"></script>
+  <script src="pvWatts-API.js" type="module"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div id="system-designer">
     <h1> Solar/Battery System Designer </h1>
+    <div id = 'test-info'>
+    </div>
     <div id="app-content"> 
         <h2> Enter your desired system information: </h2> 
         <div class = "module" id="module-kwh"> 
-            <!-- <h3> Enter your zip code: </h3> -->
-            <!-- <input id ="zip-code" type = "text" /> -->
             <form role="form" class="form-inline">
                 <div class="zip-form-group">
                     <label for="zip-code" style="font-size: 20px">Enter your zip code: </label>
@@ -34,7 +36,6 @@
               <p class= "big-font" id = "average-electricity-text"> Your average electricity consumption is: </p>
               <input id = "residential-rate-inp" type = "number" > 
               <input type="range" min="1" max="4500" value="0" step = "1" id = "kwh-slider">
-              <!-- <label for="ouput-options">Choose a dog name:</label> -->
               <select name="output-options" id="output-options">
                   <option value="month" selected> kWh / Month</option>
                   <option value="day"> kWh / Day</option>
@@ -95,10 +96,15 @@
               <input id = "battery-array-slider" type="range" min = '0' step = '1' value="0" max = '20'>
               <p class ="big-font" id = "battery-array-panels" style="display:inline-block"> 0 </p>
               <p class="big-font" id = "battery-array-kwhs"> 0 kWh</p>
-              <!-- <p class="big-font" id = "battery-array-kws"> 0 kW</p> -->
             </div>
           </div>
           <button type="button" id = "solar-api">Get System Data </button>
+          <div id = 'system-results'>
+            <p id = 'gen-days'> </p>
+            <p id = 'gen-hours'> </p>
+            <p id = 'pv-sell-back'> </p>
+            <p id = 'self-reliance'> </p>
+          </div>
         </div>
 
 
