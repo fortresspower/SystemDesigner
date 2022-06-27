@@ -1,5 +1,3 @@
-const solarDetailsChbox = document.getElementById("solar-details");
-
 //Add event listener to bound tilt input
 document.getElementById('inp-tilt').addEventListener('change', function () {
     let el = document.getElementById('inp-tilt');
@@ -27,7 +25,8 @@ document.getElementById("battery-quantity").addEventListener('change', function 
     if (el.value < 0) { el.value = 0;}
 })
 
-//Handle what to do when solar detilas checkbox value changes
+const solarDetailsChbox = document.getElementById("solar-details");
+//Show/Hide optional solar details when solar details checkbox value changes
 solarDetailsChbox.addEventListener("change", function () {
     if (solarDetailsChbox.checked) {
         document.getElementById('tilt-azimuth').style.display = 'inline-block';
@@ -78,7 +77,7 @@ document.getElementById('battery-array-slider').addEventListener('input', functi
     }
 })
 
-//Function update text below
+//Function update battery text next to battery slider
 function updateBatterySystemText(kWVal) {
     let battSelection = document.getElementById('battery-options');
     let quantity = parseInt(document.getElementById('battery-quantity').value); 

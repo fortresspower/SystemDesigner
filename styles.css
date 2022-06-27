@@ -12,6 +12,14 @@
     position: relative;
 }
 
+#test-info {
+    position: absolute;
+    width:25vw;
+    height:25vw;
+    top: 45%;
+    left: 5%;
+}
+
 .module {
     overflow: auto;
     width: 90%;
@@ -35,6 +43,14 @@
     width: 100%;
     top: 321px;
     display: none;
+}
+
+#system-results {
+    display: none;
+    position: absolute;
+    margin: 0 auto;
+    top: 200px;
+    left: 20px;
 }
 
 #solar-details {
