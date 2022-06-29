@@ -40,6 +40,7 @@ export function handlePVWattsOutput(data) {
         gridOutflow: 0,
         genOutput: 0,
         genDays: 0,
+        solarConsumption: 0,
         dcData: data
     };
 
@@ -55,6 +56,7 @@ export function handlePVWattsOutput(data) {
     let solarOutflow; //Flow out of PV
     let amountStored; //Flow to battery
     let gridOutflow; //Flow to grid
+    let solarConsumption; //Instant solar consumption
     let batteryCapacity = batterySize + (data[0]* solarArraySize/1000) - averageConsumption; //Capacity of battery before current hour runs
     let genChargeStart = 0.2; //What battery capactiy to start charging with generator at
     let genSize = inverterQuantity * inverterSize; //generator charging rate in kW
@@ -78,6 +80,8 @@ export function handlePVWattsOutput(data) {
         } else { 
             solarOutflow = 0; 
         }
+
+        solarConsumption = pvOutput - solarOutflow; //Row M Calc
 
         //Uses battery capacity from iteration i-1, mimic going a row back in the excel
         if (solarOutflow + batteryCapacity > batterySize) { //Row O calc
@@ -115,6 +119,7 @@ export function handlePVWattsOutput(data) {
         systemData['amountStored'] = systemData['amountStored'] + amountStored;
         systemData['gridOutflow'] = systemData['gridOutflow'] + gridOutflow;
         systemData['genOutput'] = systemData['genOutput'] + genOutput;
+        systemData['solarConsumption'] = systemData['solarConsumption'] + solarConsumption;
     }
     //console.log(systemData);
     return systemData; //Equivalent to last row of hourly energy flow spreadsheet
