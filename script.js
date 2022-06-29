@@ -21,18 +21,25 @@ function showResult(res) {
     let averageConsumption = document.getElementById('residential-rate-inp').value; //monthly average kww consumption
 
     //Set Gen Days Text
-    document.getElementById('gen-days').innerHTML = 'Days with Generator Use: ' + res.genDays;
+    document.getElementById('gen-days').innerHTML = 'Days with Grid/Gen use: ' + res.genDays;
     //Set Gen Hours Text
     let size = parseInt(document.getElementById('inverter-quantity').value) * parseFloat(document.getElementById('inverter-options').value); //Generator size
-    document.getElementById('gen-hours').innerHTML = 'Hours with Generator Use: ' + Math.round(res.genOutput / size);
+    document.getElementById('gen-hours').innerHTML = 'Average runtime of Grid/Gen: ' + Math.round((res.genOutput / size)/res.genDays);
     //Set Pv sell back text
-    document.getElementById('pv-sell-back').innerHTML = 'Percent of Solar You Sold Back vs Consumed: ' + Math.round((100 * res.gridOutflow)/(12 * averageConsumption), 3) + '%';
+    document.getElementById('pv-sell-back').innerHTML = 'PV Sellback Capacity: ' + Math.round((100 * res.gridOutflow)/res.pvOutput, 3) + '%';
     //Set self reliance text
-    document.getElementById('self-reliance').innerHTML = 'Percent Self Reliant: ' + Math.round(100 * (1 - (res.genOutput/(12 * averageConsumption))), 3) + '%';
+    document.getElementById('self-reliance').innerHTML = 'Percent Off-Grid: ' + Math.round(100 * (res.solarConsumption/(12 * averageConsumption)), 3) + '%';
+    //Set solar offest text
+    document.getElementById('solar-offset').innerHTML = 'Extra Solar Offset when Grid-Tied: ' + Math.round(res.pvOutput/(12 * averageConsumption));
+    //Set solar production text
+    document.getElementById('solar-production').innerHTML = 'Total Solar Production (kWh): ' + numberWithCommas(Math.round(res.pvOutput));
     //Show result text 
     resultModule.style.display = 'block';
 }
-
+//Helper to display large numbers with commas
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ");
+}
 //have battery slider recall solar api recalculting data
 document.getElementById('solar-array-slider').addEventListener('input', function() {
     runPVWattsAPI(showResult);
@@ -64,7 +71,7 @@ function showAPIData(res) {
     console.log(res);
     Object.keys(res).forEach(key => {
         let p = document.createElement('p');
-        p.innerHTML = key + ' : ' + Math.round(res[key]);
+        p.innerHTML = key + ' : ' + numberWithCommas(Math.round(res[key]));
         newEl.appendChild(p);
     });
 }
