@@ -6,6 +6,32 @@ let batteryOptions = document.getElementById('battery-options');
 let batterySlider = document.getElementById('battery-array-slider');
 let solarSlider = document.getElementById('solar-array-slider');
 
+
+document.getElementById('submit-button').addEventListener('click', function() {
+    //Basic email check
+    if (document.getElementById('email-input').value.includes('@')) {
+        sendMail();
+    }
+});
+
+function sendMail() {
+    let emailInp = document.getElementById('email-input');
+
+    var currentdate = new Date(); 
+    var datetime = '(' + currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear() + " "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds() + ')';
+
+    var link = "mailto:" + emailInp.value 
+             + "?cc=referral@fortresspower.com"
+             + "&subject=" + encodeURIComponent("Fortress System Report " + datetime )
+             + "&body=" + encodeURIComponent(document.getElementById('system-results').innerText);
+    window.location.href = link;
+}
+
 //Updates solar slider for inverter listeners
 function updateSolarSlider() {
     //Make sure dropwdown has a value
@@ -88,27 +114,6 @@ batteryOptions.addEventListener('change', function () {
     lastBatteryVal = currentOption.getAttribute('power');
     battVal > battMax ? batteryQuant.value = battMax : batteryQuant.value = battVal;
     batterySlider.max = battMax;
-
-    //let batteryQuantity = document.getElementById("battery-quantity");
-    //Convert battery quantity to be relative to appropriate battery type
-    // if (batteryOptions.value == 'eVault Max') {
-    //     let battVal = Math.ceil(batteryQuant.value * lastBatteryVal / 18.5);
-    //     battVal > 20 ? batteryQuant.value = 20 : batteryQuant.value = battVal;
-    //     lastBatteryVal = 18.5;
-    //     batterySlider.max = 20;
-    // } else if (batteryOptions.value == 'eFlex') {
-    //     let battVal = Math.ceil(batteryQuant.value * lastBatteryVal / 5.4);
-    //     lastBatteryVal = 5.4;
-    //     batterySlider.max = 16;
-    // } else if (batteryOptions.value == 'eSpire') {
-    //     let battVal = Math.ceil(batteryQuant.value * lastBatteryVal / 233);
-    //     lastBatteryVal = 233;
-    //     batterySlider.max = 3;
-    // }
-    
-    // console.log(batteryQuant.value);
-    // batteryQuant.value = Math.ceil(parseInt(batteryQuant.value) * lastBatteryVal / parseInt(batteryOptions.power));
-    // lastBatteryVal = parseInt(batteryOptions.power);
     updateBatterySystemText(kWVal);
 });
 
@@ -125,12 +130,6 @@ document.getElementById('battery-array-slider').addEventListener('input', functi
     console.log(currentOption.getAttribute('power'));
     document.getElementById('battery-array-kwhs').innerHTML = Math.round(batterySlider.value * parseFloat(currentOption.getAttribute('power')), 1).toString() + " kWh";
     batteryQuant.value = batterySlider.value;
-    // if (batteryOptions.value == 'eFlex') {
-    //     document.getElementById('battery-array-kwhs').innerHTML = Math.round(batterySlider.value * 5.4 , 1).toString() + " kWh";
-    // } else if (batteryOptions.value == 'eVault Max') {
-    //     document.getElementById('battery-array-kwhs').innerHTML = Math.round(batterySlider.value * 18.5, 1).toString() + " kWh";
-    // }
-
 })
 
 //Function determines minimum amount of batteries and updates battery text next to battery slider
