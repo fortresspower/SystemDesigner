@@ -15,7 +15,8 @@
 </head>
 <body>
   <div id="system-designer">
-    <h1> Solar/Battery System Designer </h1>
+    <h1 id ='title-text'> Fortress System Designer </h1>
+    <img src="fortress_logo.png" id="fortress-logo" alt="fortressLogo">
     <div id = 'test-info'>
     </div>
     <div id="app-content"> 
@@ -24,25 +25,15 @@
             <form role="form" class="form-inline">
                 <div class="zip-form-group">
                     <label for="zip-code" style="font-size: 20px">Enter your zip code: </label>
-                    <input type="number" class="form-control" id="zip-code" placeholder="Zip Code" style="height: 20px"> 
+                    <input type="number" class="form-control" id="zip-code" placeholder="Zip Code"> 
                 </div>
                 <br>
                 <div class="bill-form-group">
                     <label for="monthly-bill" style="font-size: 20px">Enter your monthly electric bill: </label>
-                    <input type="number" class="form-control" id="monthly-bill" placeholder="Monthly Electric Bill" style="height: 20px"> 
+                    <input type="number" class="form-control" id="monthly-bill" placeholder="Monthly Electric Bill"> 
                 </div>
             </form>
             <button type="button" id = "utility-api">Get kWh estimates</button>
-            <div id = "utility-results"> 
-              <p class= "big-font" id = "average-electricity-text"> Your average electricity consumption is: </p>
-              <input id = "residential-rate-inp" type = "number" > 
-              <input type="range" min="1" max="4500" value="0" step = "1" id = "kwh-slider">
-              <select name="output-options" id="output-options">
-                  <option value="month" selected> kWh / Month</option>
-                  <option value="day"> kWh / Day</option>
-                  <option value="year"> MWh / Year</option>
-              </select>
-            </div>
         </div>
         <div class = "module" id="module-system-information">
           <p class = "big-font" id = "solar-details-text"> Enter optional solar details: </p> 
@@ -54,38 +45,41 @@
             <input class="angle" id="inp-azimuth" type="number" min = "0" max="359" value = "180">
           </div> 
           <div id="inverter-details"> 
-            <label for="inverter-options">Choose an inverter size:</label> 
+            <label for="inverter-options" class = "big-font">Choose an inverter size:</label> 
             <select id="inverter-options">
               <option hidden disabled selected value> -- select an option -- </option>
               <option value="7.6"> 7.6 kW</option>
               <option value="12"> 12 kW</option>
               <option value="125"> 125 kW</option>
             </select>
-            <label id = "label-inverter-quantity" for="inverter-quantity"> Enter the inverter amount: </label> 
+            <label id = "label-inverter-quantity" for="inverter-quantity" class = "big-font"> Enter the inverter amount: </label> 
             <input id = "inverter-quantity" type="number" min = '0' value = "0" style = 'width: 50px'>
           </div>
           <div id="battery-details"> 
-            <label for="battery-options">Choose a Fortress Battery model:</label> 
+            <label for="battery-options" class = "big-font">Choose a Fortress Battery model:</label> 
             <select id="battery-options">
               <option hidden disabled selected value> -- select an option -- </option>
               <option value="eFlex" power="5.4" max="16"> eFlex (5.4 kWh) </option>
               <option value="eVault Max" power="18.5" max="20"> eVault Max (18.5 kWh) </option>
               <option value="eSpire" power="233" max="3"> eSpire (233 kWh) </option>
             </select>
-            <label id = "label-battery-quantity" for="battery-quantity"> Enter the battery amount: </label> 
+            <label id = "label-battery-quantity" for="battery-quantity" class = "big-font"> Enter the battery amount: </label> 
             <input id = "battery-quantity" type="number" min = '0' value = "0" style = 'width: 50px'>
           </div>
-          <!-- <div id="grid-details">
-            <label for = "grid-options"> Is your system connected to the grid or not: </label>
-            <select id = "grid-options">
-              <option value = "offgrid"> On Grid </option> 
-              <option value = "offgrid"> Off Grid </option> 
-            </select>
-          </div> -->
           
         </div>
         <div class="module" id="module-fortress-system">
-          <h2> Your Fortress Battery/Solar System: </h2> 
+          <h2> Your Fortress System: </h2> 
+          <div id = "utility-results"> 
+            <p class= "big-font" id = "average-electricity-text"> Your average electricity consumption is: </p>
+            <input id = "residential-rate-inp" type = "number" > 
+            <input type="range" min="1" max="4500" value="0" step = "1" id = "kwh-slider">
+            <select name="output-options" id="output-options">
+                <option value="month" selected> kWh / Month</option>
+                <option value="day"> kWh / Day</option>
+                <option value="year"> MWh / Year</option>
+            </select>
+          </div>
           <div class  = 'array-details' id = "solar-array-details">
             <label class = 'big-font' id = "solar-array-label" for="solar-array-slider"> Enter solar array details: </label> 
             <input id = "solar-array-slider" type="range" min = '0' step = '1' value="0" max = '1454'>
@@ -102,12 +96,16 @@
           </div>
           <button type="button" id = "solar-api">Get System Data </button>
           <div id = 'system-results'>
-            <p id = 'gen-days'> </p>
-            <p id = 'gen-hours'> </p>
-            <p id = 'pv-sell-back'> </p>
-            <p id = 'self-reliance'> </p>
-            <p id = 'solar-offset'> </p>
-            <p id = 'solar-production'> </p>
+            <p id = 'gen-days' class = "big-font"> </p>
+            <p id = 'gen-hours' class = "big-font"> </p>
+            <p id = 'self-reliance' class = "big-font"> </p>
+            <p id = 'solar-production' class = "big-font"> </p>
+            <p id = 'solar-consumption' class = "big-font"> </p>
+          </div>
+          <div id = 'email-results'>
+            <label class = 'big-font' id = "email-label" for="email-input"> Enter your email to recieve system data: </label> 
+            <input id="email-input" type="text" value="">
+            <button type = "button" id="submit-button" style="display:inline-block"> Submit</button>
           </div>
         </div>
 
