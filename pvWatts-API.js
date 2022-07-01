@@ -46,7 +46,7 @@ export function handlePVWattsOutput(data) {
 
     //Pull input values user put into webpage
     let solarArraySize = document.getElementById('solar-array-slider').value;
-    let averageConsumption = document.getElementById('residential-rate-inp').value / 730; //Your average monthly consumption divided by hours in a month to get Kw
+    let averageConsumption = parseInt(document.getElementById('module-kwh').getAttribute('consumption')) / 730; //Your average monthly consumption divided by hours in a month to get Kw
     let batterySize = parseInt(document.getElementById('battery-array-kwhs').innerHTML.replace('kWh', ''));
     let inverterSize = parseFloat(document.getElementById('inverter-options').value); 
     let inverterQuantity = parseInt(document.getElementById('inverter-quantity').value);
@@ -85,7 +85,8 @@ export function handlePVWattsOutput(data) {
 
         //Uses battery capacity from iteration i-1, mimic going a row back in the excel
         if (solarOutflow + batteryCapacity > batterySize) { //Row O calc
-            amountStored = solarOutflow- (batteryCapacity + solarOutflow - batterySize);
+            //amountStored = solarOutflow- (batteryCapacity + solarOutflow - batterySize);
+            amountStored = batterySize - batteryCapacity;
         } else {
             amountStored = solarOutflow;
         }
@@ -95,7 +96,7 @@ export function handlePVWattsOutput(data) {
         if (batteryCapacity + pvOutput + genOutput - averageConsumption < batterySize) { //Row Q calc
             batteryCapacity = batteryCapacity + pvOutput + genOutput - averageConsumption
         } else {
-            batteryCapacity = genSize;
+            batteryCapacity = batterySize;
         }
 
         //Generator was run condition
