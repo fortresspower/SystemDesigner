@@ -37,7 +37,6 @@
 }
 
 .module {
-    overflow: auto;
     width: 90%;
     position: absolute;
     left: 20px;

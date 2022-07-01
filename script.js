@@ -16,13 +16,6 @@ export function showResult(res) {
     
     //Set Gen Days Text
     document.getElementById('gen-days').innerHTML = 'Days with Grid/Gen use: ' + res.genDays;
-    //Set Gen Hours Text
-    // let size = parseInt(document.getElementById('inverter-quantity').value) * parseFloat(document.getElementById('inverter-options').value); //Generator size
-    // let genText = 'Average runtime of Grid/Gen: ' + Math.round((res.genOutput / size)/res.genDays);
-    // if (res.genOutput == 0) { genText = 'Average runtime of Grid/Gen: 0'}
-    // document.getElementById('gen-hours').innerHTML = genText;
-    //Set Pv sell back text
-    // document.getElementById('pv-sell-back').innerHTML = 'PV Sellback Capacity: ' + Math.round((100 * res.gridOutflow)/res.pvOutput, 3) + '%';
     //Set self reliance text
     document.getElementById('self-reliance').innerHTML = 'Percent Off-Grid: ' + Math.round(100 * (res.solarConsumption/(12 * averageConsumption)), 3) + '%';
     //Set solar production text

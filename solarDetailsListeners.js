@@ -11,7 +11,6 @@ solarDetailsChbox.addEventListener("change", function () {
 //Add event listener to bound tilt input
 document.getElementById('inp-tilt').addEventListener('change', function () {
     let el = document.getElementById('inp-tilt');
-    console.log(el.value);
     if (el.value > 90) { el.value = 90;} 
     else if (el.value < 0) { el.value = 0;}
 });

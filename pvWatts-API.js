@@ -45,7 +45,7 @@ export function handlePVWattsOutput(data) {
     };
 
     //Pull input values user put into webpage
-    let solarArraySize = document.getElementById('solar-array-slider').value;
+    let solarArraySize = document.getElementById('solar-array-slider').value * 0.43;
     let averageConsumption = parseInt(document.getElementById('module-kwh').getAttribute('consumption')) / 730; //Your average monthly consumption divided by hours in a month to get Kw
     let batterySize = parseInt(document.getElementById('battery-array-kwhs').innerHTML.replace('kWh', ''));
     let inverterSize = parseFloat(document.getElementById('inverter-options').value); 
@@ -73,7 +73,11 @@ export function handlePVWattsOutput(data) {
     //Iterate over all hours of dc solar array output
     //Continously update systemData object with calculated values in for loop mimicking excel
     for (let i = 1; i < data.length; i++) {
-        pvOutput = data[i] * (solarArraySize / 1000); //Store solar array output data
+        if (data[i] != 0) { //Make sure value is not 0
+            pvOutput = (data[i] * solarArraySize) / 1000; //Store solar array output data
+        } else {
+            pvOutput = 0;
+        }
     
         if (pvOutput - averageConsumption > 0) { //Row N calc
             solarOutflow = pvOutput - averageConsumption;
@@ -122,6 +126,5 @@ export function handlePVWattsOutput(data) {
         systemData['genOutput'] = systemData['genOutput'] + genOutput;
         systemData['solarConsumption'] = systemData['solarConsumption'] + solarConsumption;
     }
-    //console.log(systemData);
     return systemData; //Equivalent to last row of hourly energy flow spreadsheet
 }
