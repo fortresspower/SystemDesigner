@@ -1,5 +1,5 @@
-import {runUtilityAPI} from './utilityRates-API.js';
-import {runPVWattsAPI} from './pvWatts-API.js';
+import {createPVWattsListeners} from './listeners.js';
+import {createUtilityListeners} from './listeners.js';
 
 //Set up utlity rate API listeners
 createUtilityListeners();
@@ -8,8 +8,8 @@ createUtilityListeners();
 createPVWattsListeners();
 
 //Handles runPVWattsAPI result, displays calc results from API call in a div below solar and battery sliders
-function showResult(res) {
-    showAPIData(res);
+export function showResult(res) {
+    //showAPIData(res); //Legacy Line that will show pvwatts api result for testing reasons
     document.getElementById('solar-api').innerHTML = 'Recalculate'; //Change button text to recalculate after API Called at least once
     let resultModule = document.getElementById('system-results');
     let averageConsumption = parseInt(document.getElementById('module-kwh').getAttribute('consumption')); //monthly average kww consumption
@@ -17,10 +17,10 @@ function showResult(res) {
     //Set Gen Days Text
     document.getElementById('gen-days').innerHTML = 'Days with Grid/Gen use: ' + res.genDays;
     //Set Gen Hours Text
-    let size = parseInt(document.getElementById('inverter-quantity').value) * parseFloat(document.getElementById('inverter-options').value); //Generator size
-    let genText = 'Average runtime of Grid/Gen: ' + Math.round((res.genOutput / size)/res.genDays);
-    if (res.genOutput == 0) { genText = 'Average runtime of Grid/Gen: 0'}
-    document.getElementById('gen-hours').innerHTML = genText;
+    // let size = parseInt(document.getElementById('inverter-quantity').value) * parseFloat(document.getElementById('inverter-options').value); //Generator size
+    // let genText = 'Average runtime of Grid/Gen: ' + Math.round((res.genOutput / size)/res.genDays);
+    // if (res.genOutput == 0) { genText = 'Average runtime of Grid/Gen: 0'}
+    // document.getElementById('gen-hours').innerHTML = genText;
     //Set Pv sell back text
     // document.getElementById('pv-sell-back').innerHTML = 'PV Sellback Capacity: ' + Math.round((100 * res.gridOutflow)/res.pvOutput, 3) + '%';
     //Set self reliance text
@@ -29,10 +29,13 @@ function showResult(res) {
     document.getElementById('solar-production').innerHTML = 'Total Solar Production (kwh): ' + numberWithCommas(Math.round(res.pvOutput));
     //Set solar consumption text
     document.getElementById('solar-consumption').innerHTML = 'Estimated Solar Consumption (kwh): ' + numberWithCommas(12 * averageConsumption);
+    //Set percent offset text
+    document.getElementById('percent-offset').innerHTML = 'Percent Offset from sellback: ' + Math.round(100 * (res.solarOutflow/(12 * averageConsumption)), 3) + '%'
+
     //Show result text 
     resultModule.style.display = 'block';
     //Show email input and submit system data button
-    document.getElementById('email-results').style.display = 'block';
+    document.getElementById('email-results').style.display = 'inline';
 }
 
 //Helper to display large numbers with commas
@@ -40,6 +43,9 @@ function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ", ");
 }
 
+/*
+    LEGACY FUNCTION TO VIEW PV WATTS API OUTPUT DATA
+/*
 //Function shows api result data on the left for testing purpose
 function showAPIData(res) {
     //Remove old test info div
@@ -66,69 +72,6 @@ function showAPIData(res) {
     });
 }
 
-function createUtilityListeners() {
-    const buttonVal = document.getElementById("utility-api");
-    const zipCodeInp = document.getElementById('zip-code');
-    const billInp = document.getElementById('monthly-bill');
-
-    buttonVal.addEventListener("click", function() {
-        if (zipCodeInp.value.length != 0 && billInp.value.length != 0) {
-            runUtilityAPI();
-        }
-    });
-    
-    //Get updating zip code input or bill to recall utility api
-    zipCodeInp.addEventListener("change", function() {
-        if (zipCodeInp.value.length != 0 && billInp.value.length != 0) {
-            runUtilityAPI();
-        }
-    });
-    billInp.addEventListener("change", function() {
-        if (zipCodeInp.value.length != 0 && billInp.value.length != 0) {
-            runUtilityAPI();
-        }
-    });
-}
-
-function createPVWattsListeners() {
-    let solarSlider = document.getElementById('solar-array-slider');
-    let batterySlider = document.getElementById('battery-array-slider');
-
-    //Get updating rate slider to recall solar api
-    document.getElementById('kwh-slider').addEventListener('input', function() {
-        if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
-            runPVWattsAPI(showResult);
-        }
-    });
-
-    document.getElementById('residential-rate-inp').addEventListener('change', function() {
-        if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
-            runPVWattsAPI(showResult);
-        }
-    });
-
-    //Set up button listener to call solar api
-    document.getElementById('solar-api').addEventListener('click', function() {
-        if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
-            runPVWattsAPI(showResult);
-        }
-    });
-
-    //have solar slider recall solar api recalculting data
-    solarSlider.addEventListener('input', function() {
-        if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
-            runPVWattsAPI(showResult);
-        }
-    });
-
-    //have battery slider recall battery api recalculting data
-    batterySlider.addEventListener('input', function() {
-        if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
-            runPVWattsAPI(showResult);
-        }
-    });
-}
-/*
 * WORKAROUND CODE KEEPING HERE FOR NOW AVOIDS API CALLS ON INPUT CHANGES
 
 Put this if statement in solar api event lsitener and create var pvWattsData, add to other listeners
