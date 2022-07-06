@@ -250,17 +250,17 @@
     left: 300px;
 }
 
-/* #solar-array-panels {
-    position: absolute;
-    top: 10%;
-    left: 77%;
-    margin-left: 5px;
-} */
+#solar-array-panels {
+    display:inline-block;
+    margin-top: 0;
+    margin-bottom: 0;
+}
 
 #battery-system-details {
     position: absolute;
     height: 80px;
-    top: 180px;
+    /* top: 180px; */
+    top: 25%;
     width: 100%;
 }
 

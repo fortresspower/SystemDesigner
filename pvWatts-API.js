@@ -47,7 +47,9 @@ export function handlePVWattsOutput(data) {
     //Pull input values user put into webpage
     let solarArraySize = document.getElementById('solar-array-slider').value * 0.43;
     let averageConsumption = parseInt(document.getElementById('module-kwh').getAttribute('consumption')) / 730; //Your average monthly consumption divided by hours in a month to get Kw
-    let batterySize = parseInt(document.getElementById('battery-array-kwhs').innerHTML.replace('kWh', ''));
+    //let batterySize = parseInt(document.getElementById('battery-array-kwhs').innerHTML.replace('kWh', ''));
+    let batterySize = parseFloat(document.getElementById('battery-array-panels').innerHTML.split(', ')[1].replace('kWh', ''))
+    console.log(batterySize);
     let inverterSize = parseFloat(document.getElementById('inverter-options').value); 
     let inverterQuantity = parseInt(document.getElementById('inverter-quantity').value);
 

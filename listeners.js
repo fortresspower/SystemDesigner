@@ -40,8 +40,8 @@ batteryQuant.addEventListener('change', function () {
 //Set up event listener for slider that updates text for solar array
 solarSlider.addEventListener("input", function () {
     let kWVal = Math.round(parseInt(solarSlider.value) * 0.43, 1);
-    document.getElementById("solar-array-panels").innerHTML = solarSlider.value + " panels";
-    document.getElementById("solar-array-kws").innerHTML = kWVal.toString() + " kW";
+    document.getElementById("solar-array-panels").innerHTML = solarSlider.value + " panels, " + kWVal.toString() + " kW";
+    //document.getElementById("solar-array-kws").innerHTML = kWVal.toString() + " kW";
     updateBatterySystemText(kWVal);
 });
 
@@ -66,9 +66,10 @@ document.getElementById("battery-quantity").addEventListener('change', function 
 
 //Set up event listener to update text when slider gets updated
 document.getElementById('battery-array-slider').addEventListener('input', function () {
-    document.getElementById('battery-array-panels').innerHTML = batterySlider.value.toString() + " " +  batteryOptions.value + "s";
     let currentOption = document.querySelector("option[value='" + batteryOptions.value + "']");
-    document.getElementById('battery-array-kwhs').innerHTML = Math.round(batterySlider.value * parseFloat(currentOption.getAttribute('power')), 1).toString() + " kWh";
+    document.getElementById('battery-array-panels').innerHTML = batterySlider.value.toString() + " " +  batteryOptions.value + "s, " +
+    Math.round(batterySlider.value * parseFloat(currentOption.getAttribute('power')), 1).toString() + " kWh";
+    //document.getElementById('battery-array-kwhs').innerHTML = Math.round(batterySlider.value * parseFloat(currentOption.getAttribute('power')), 1).toString() + " kWh";
     batteryQuant.value = batterySlider.value;
 })
 
@@ -90,8 +91,9 @@ function updateBatterySystemText(kWVal) {
         if (minimumBatts > 3) { quantity = 3; } else { quantity = Math.max(batteryQuant.value, minimumBatts) } //set bound on battery number for eSpire      
     }
     let currentOption = document.querySelector("option[value='" + batteryOptions.value + "']");
-    document.getElementById('battery-array-kwhs').innerHTML = Math.round(quantity * parseFloat(currentOption.getAttribute('power'))).toString() + " kWh";
-    document.getElementById('battery-array-panels').innerHTML = quantity.toString() + " " +  batteryOptions.value + "s";
+    //document.getElementById('battery-array-kwhs').innerHTML = Math.round(quantity * parseFloat(currentOption.getAttribute('power'))).toString() + " kWh";
+    document.getElementById('battery-array-panels').innerHTML = quantity.toString() + " " +  batteryOptions.value + "s, " +
+    Math.round(quantity * parseFloat(currentOption.getAttribute('power'), 1)).toString() + " kWh";
     //Update Battery Quantity
     batteryQuant.value = quantity;
     //Update Battery Slider
@@ -127,8 +129,8 @@ function updateSolarSlider() {
     //Calculate number of panels based on 0.43 kw sized ones
     solarSlider.value =  Math.ceil(kWVal / 0.43);
     //Update text next to solar slider
-    document.getElementById("solar-array-panels").innerHTML = solarSlider.value + " panels";
-    document.getElementById("solar-array-kws").innerHTML = kWVal.toString() + " kW";
+    document.getElementById("solar-array-panels").innerHTML = solarSlider.value + " panels, " + kWVal.toString() + " kW";
+    //document.getElementById("solar-array-kws").innerHTML = kWVal.toString() + " kW";
     //Update battery values as well if battery dropdown filled out
     if (batteryOptions.value.length != 0) {
         updateBatterySystemText(kWVal);

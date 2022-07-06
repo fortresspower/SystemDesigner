@@ -1,10 +1,6 @@
 import {createPVWattsListeners} from './listeners.js';
 import {createUtilityListeners} from './listeners.js';
 
-// window. addEventListener('resize', function() {
-//     document.getElementById('email-results').style.top = "80%";
-// });
-
 //Set up utlity rate API listeners
 createUtilityListeners();
 
