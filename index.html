@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <meta name="viewport" content="width=500, initial-scale=1"> -->
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>System Designer</title>
   <script src="script.js" type="module"></script>
@@ -34,9 +35,9 @@
                 <div class="bill-form-group">
                     <label for="monthly-bill" style="font-size: 20px">Enter your monthly electric bill: </label>
                     <input type="number" class="form-control" id="monthly-bill" placeholder="Monthly Electric Bill"> 
+                    <button class="form-control" type="button" id = "utility-api">Get kWh estimates</button>
                 </div>
             </form>
-            <button type="button" id = "utility-api">Get kWh estimates</button>
         </div>
         <div class = "module" id="module-system-information">
           <p class = "big-font" id = "solar-details-text"> Enter optional solar details: </p> 
@@ -48,31 +49,39 @@
             <input class="angle" id="inp-azimuth" type="number" min = "0" max="359" value = "180">
           </div> 
           <div id="inverter-details"> 
-            <label for="inverter-options" class = "big-font">Choose an inverter size:</label> 
-            <select id="inverter-options">
-              <option hidden disabled selected value> -- select an option -- </option>
-              <option value="7.6"> 7.6 kW</option>
-              <option value="12"> 12 kW</option>
-              <option value="125"> 125 kW</option>
-            </select>
-            <label id = "label-inverter-quantity" for="inverter-quantity" class = "big-font"> Enter the inverter amount: </label> 
-            <input id = "inverter-quantity" type="number" min = '0' value = "0" style = 'width: 50px'>
+            <div id = inverter-options-wrapper>
+              <label for="inverter-options" class = "big-font">Choose an inverter size:</label> 
+              <select id="inverter-options">
+                <option hidden disabled selected value> -- select an option -- </option>
+                <option value="7.6"> 7.6 kW</option>
+                <option value="12"> 12 kW</option>
+                <option value="125"> 125 kW</option>
+              </select>
+            </div>
+            <div id = inverter-quantity-wrapper>
+              <label id = "label-inverter-quantity" for="inverter-quantity" class = "big-font"> Enter the inverter amount: </label> 
+              <input id = "inverter-quantity" type="number" min = '0' value = "0" style = 'width: 50px'>
+            </div>
           </div>
           <div id="battery-details"> 
-            <label for="battery-options" class = "big-font">Choose a Fortress Battery model:</label> 
-            <select id="battery-options">
-              <option hidden disabled selected value> -- select an option -- </option>
-              <option value="eFlex" power="5.4" max="16"> eFlex (5.4 kWh) </option>
-              <option value="eVault Max" power="18.5" max="20"> eVault Max (18.5 kWh) </option>
-              <option value="eSpire" power="233" max="3"> eSpire (233 kWh) </option>
-            </select>
-            <label id = "label-battery-quantity" for="battery-quantity" class = "big-font"> Enter the battery amount: </label> 
-            <input id = "battery-quantity" type="number" min = '0' value = "0" style = 'width: 50px'>
+            <div id = battery-options-wrapper> 
+              <label for="battery-options" class = "big-font">Choose a Fortress Battery model:</label> 
+              <select id="battery-options">
+                <option hidden disabled selected value> -- select an option -- </option>
+                <option value="eFlex" power="5.4" max="16"> eFlex (5.4 kWh) </option>
+                <option value="eVault Max" power="18.5" max="20"> eVault Max (18.5 kWh) </option>
+                <option value="eSpire" power="233" max="3"> eSpire (233 kWh) </option>
+              </select>
+            </div>
+            <div id="'battery-quantity-wrapper">
+              <label id = "label-battery-quantity" for="battery-quantity" class = "big-font"> Enter the battery amount: </label> 
+              <input id = "battery-quantity" type="number" min = '0' value = "0" style = 'width: 50px'>
+            </div>
           </div>
           
         </div>
         <div class="module" id="module-fortress-system">
-          <h2> Your Fortress System: </h2> 
+          <h2 id ='fortress-module-text'> Your Fortress System: </h2> 
           <div id = "utility-results"> 
             <p class= "big-font" id = "average-electricity-text"> Your average electricity consumption is: </p>
             <input id = "residential-rate-inp" type = "number" > 
@@ -86,7 +95,7 @@
           <div class  = 'array-details' id = "solar-array-details">
             <label class = 'big-font' id = "solar-array-label" for="solar-array-slider"> Enter solar array details: </label> 
             <input id = "solar-array-slider" type="range" min = '0' step = '1' value="0" max = '1454'>
-            <p class ="big-font" id = "solar-array-panels" style="display:inline-block"> 0 </p>
+            <p class ="big-font" id = "solar-array-panels" style ="display:inline-block; margin-left: 5px;"> 0 </p>
             <p class="big-font" id = "solar-array-kws"> 0 kW</p>
           </div>
           <div id = "battery-system-details">

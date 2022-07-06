@@ -1,6 +1,10 @@
 import {createPVWattsListeners} from './listeners.js';
 import {createUtilityListeners} from './listeners.js';
 
+window. addEventListener('resize', function() {
+    document.getElementById('email-results').style.top = "75%";
+});
+
 //Set up utlity rate API listeners
 createUtilityListeners();
 
@@ -28,7 +32,7 @@ export function showResult(res) {
     //Show result text 
     resultModule.style.display = 'block';
     //Show email input and submit system data button
-    document.getElementById('email-results').style.display = 'inline';
+    document.getElementById('email-results').style.display = 'flex';
 }
 
 //Helper to display large numbers with commas
