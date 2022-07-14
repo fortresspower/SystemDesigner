@@ -1,6 +1,5 @@
 import {runUtilityAPI} from './utilityRates-API.js';
-import {runPVWattsAPI} from './pvWatts-API.js';
-import {showResult} from './script.js';
+import {runGeoAPI} from './googleMaps-API.js';
 
 //Set up references to html elements to add event listeners  
 let invQuant = document.getElementById("inverter-quantity");
@@ -13,10 +12,18 @@ let solarSlider = document.getElementById('solar-array-slider');
 //Add event listener to bound inverter quantity and update solar array slider default val
 invQuant.addEventListener('change', function () {
     updateSolarSlider();
+    batterySlider.setAttribute('max', 3*invQuant.value);
+    batteryQuant.max = 3 * invQuant.value;
 })
 
 //Add event listener that updates inverter quantity and solar array slider and text when inverter dropwdown option changes
 invOpt.addEventListener('change', function () {
+    if (invOpt.value == '125') {
+        batteryOptions.value = "eSpire";
+        batteryQuant.value = 1;
+        batterySlider.setAttribute('max', 3*invQuant.value);
+        batteryQuant.max = 3 * invQuant.value;
+    }
     updateSolarSlider();
 });
 
@@ -30,7 +37,7 @@ batteryQuant.addEventListener('change', function () {
     } else if (batteryOptions.value == 'eVault Max') {
         upperBound = 20;
     } else if (batteryOptions.value == 'eSpire') { 
-        upperBound = 3;
+        upperBound = batteryQuant.max;
     }
     if (batteryQuant.value > upperBound) {
         batteryQuant.value = upperBound;
@@ -88,7 +95,7 @@ function updateBatterySystemText(kWVal) {
         //document.getElementById('battery-array-kwhs').innerHTML = Math.round(parseInt(batteryString) * 18.5, 1).toString() + " kWh";
     } else if (batteryOptions.value == 'eSpire') {
         minimumBatts = Math.ceil(kWVal/125);
-        if (minimumBatts > 3) { quantity = 3; } else { quantity = Math.max(batteryQuant.value, minimumBatts) } //set bound on battery number for eSpire      
+        if (minimumBatts > 3*invQuant.value) { quantity = 3*invQuant.value; } else { quantity = Math.max(batteryQuant.value, minimumBatts) } //set bound on battery number for eSpire      
     }
     let currentOption = document.querySelector("option[value='" + batteryOptions.value + "']");
     //document.getElementById('battery-array-kwhs').innerHTML = Math.round(quantity * parseFloat(currentOption.getAttribute('power'))).toString() + " kWh";
@@ -111,7 +118,7 @@ function updateSolarSlider() {
 
     //Bound inv quantity depending on inverter type
     //7.6kW and 12kW inverter maximum 12 units
-    //125kW inverter maximum 5 units    
+    //125kW inverter maximum 3 espires per inverter    
     if (invOpt.value == '7.6' || invOpt.value == '12') {
         if (invQuant.value > 12) {
             invQuant.value = 12;
@@ -130,7 +137,6 @@ function updateSolarSlider() {
     solarSlider.value =  Math.ceil(kWVal / 0.43);
     //Update text next to solar slider
     document.getElementById("solar-array-panels").innerHTML = solarSlider.value + " panels, " + kWVal.toString() + " kW";
-    //document.getElementById("solar-array-kws").innerHTML = kWVal.toString() + " kW";
     //Update battery values as well if battery dropdown filled out
     if (batteryOptions.value.length != 0) {
         updateBatterySystemText(kWVal);
@@ -165,34 +171,39 @@ export function createPVWattsListeners() {
     //Get updating rate slider to recall solar api
     document.getElementById('kwh-slider').addEventListener('input', function() {
         if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
-            runPVWattsAPI(showResult);
+            runGeoAPI();
+            //runPVWattsAPI(showResult);
         }
     });
 
     document.getElementById('residential-rate-inp').addEventListener('change', function() {
         if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
-            runPVWattsAPI(showResult);
+            runGeoAPI();
+            //runPVWattsAPI(showResult);
         }
     });
 
     //Set up button listener to call solar api
     document.getElementById('solar-api').addEventListener('click', function() {
         if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
-            runPVWattsAPI(showResult);
+            runGeoAPI();
+            //runPVWattsAPI(showResult);
         }
     });
 
     //have solar slider recall solar api recalculting data
     solarSlider.addEventListener('input', function() {
         if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
-            runPVWattsAPI(showResult);
+            runGeoAPI();
+            //runPVWattsAPI(showResult);
         }
     });
 
     //have battery slider recall battery api recalculting data
     batterySlider.addEventListener('input', function() {
         if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
-            runPVWattsAPI(showResult);
+            runGeoAPI();
+            //runPVWattsAPI(showResult);
         }
     });
 }

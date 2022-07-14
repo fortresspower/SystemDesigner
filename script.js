@@ -21,9 +21,9 @@ export function showResult(res) {
     //Set solar production text
     document.getElementById('solar-production').innerHTML = 'Total Solar Production (kwh): ' + numberWithCommas(Math.round(res.pvOutput));
     //Set solar consumption text
-    document.getElementById('solar-consumption').innerHTML = 'Estimated Solar Consumption (kwh): ' + numberWithCommas(12 * averageConsumption);
+    document.getElementById('solar-consumption').innerHTML = 'Estimated Building Consumption (kwh): ' + numberWithCommas(12 * averageConsumption);
     //Set percent offset text
-    document.getElementById('percent-offset').innerHTML = 'Percent Offset from sellback: ' + Math.round(100 * (res.solarOutflow/(12 * averageConsumption)), 3) + '%'
+    document.getElementById('percent-offset').innerHTML = 'Additional Offset from Grid Sellback: ' + Math.round(100 * (res.solarOutflow/(12 * averageConsumption)), 3) + '%'
 
     //Show result text 
     resultModule.style.display = 'block';
