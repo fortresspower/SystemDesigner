@@ -28,7 +28,8 @@ export function runUtilityAPI() {
 //Function displays the electricity consumptions and sets up event listener for dropdown
 function handleUtilityResult(electricRate) {
     let monthlyConsumption = Math.round(billInp.value / electricRate);
-    document.getElementById('module-kwh').setAttribute('consumption', monthlyConsumption)
+    let kwhModule =  document.getElementById('module-kwh')
+    kwhModule.setAttribute('consumption', monthlyConsumption)
     let rateInp = document.getElementById('residential-rate-inp');
     rateInp.value = monthlyConsumption;
 
@@ -81,9 +82,15 @@ function handleUtilityResult(electricRate) {
         setMonthlyConsumption(); //Make sure consumption attribute always in monthly form
     });
 
+    var kwhRect = kwhModule.getBoundingClientRect();
+    var systemInfoModule = document.getElementById('module-system-information');
+    var fortressSystemModule = document.getElementById('module-fortress-system');
+
+    // systemInfoModule.style.top = kwhRect.height * 1.5;
+    // fortressSystemModule.style.top = systemInfoModule.getBoundingClientRect().height * 1.5;
     document.getElementById('utility-results').style.display = 'block';
-    document.getElementById('module-system-information').style.display = 'block';
-    document.getElementById('module-fortress-system').style.display = 'block';
+    systemInfoModule.style.display = 'block';
+    fortressSystemModule.style.display = 'block';
 
 }
 

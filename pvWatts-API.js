@@ -4,7 +4,10 @@ let api_key = "WkDNJ5GuHQJROwhr64ZgH4Hxu2fc51d3FlKijtsD"
 const zipCodeInp = document.getElementById("zip-code");
 
 //Run API getting solar data for given location
-export function runPVWattsAPI(callBack) {
+export function runPVWattsAPI(callBack, coords) {
+    console.log(coords);
+    // //Wait for lat and long values to be resolved before calling pv watts API
+    // runGeoAPI().then(res => coords = res);
     let system_capacity = "1" 
     let module_type = "1"
     let losses = "12"
@@ -13,9 +16,11 @@ export function runPVWattsAPI(callBack) {
     let azimuth = document.getElementById('inp-azimuth').value.toString();
 
     let rootURL = "https://developer.nrel.gov/api/pvwatts/v6.json?"
-    let requiredParameters = "api_key="+api_key+"&system_capacity="+system_capacity+"&module_type="+ module_type + "&losses=" + losses + "&array_type=" + array_type + "&tilt=" + tilt + "&azimuth=" + azimuth + "&address=" + zipCodeInp.value + "&timeframe=hourly"
+    let requiredParameters = "api_key="+api_key+"&system_capacity="+system_capacity+"&module_type="+ module_type + "&losses=" + losses + "&array_type=" + array_type + "&tilt=" + tilt + "&azimuth=" + azimuth + "&timeframe=hourly"
+    let addressParameters = "&lat=" + coords.lat + "&lon=" + coords.lng;
+
     try {
-        fetch(rootURL + requiredParameters)
+        fetch(rootURL + requiredParameters + addressParameters)
         .then(response => response.json())
         .then(data => {
             if(callBack != null){
@@ -47,7 +52,9 @@ export function handlePVWattsOutput(data) {
     //Pull input values user put into webpage
     let solarArraySize = document.getElementById('solar-array-slider').value * 0.43;
     let averageConsumption = parseInt(document.getElementById('module-kwh').getAttribute('consumption')) / 730; //Your average monthly consumption divided by hours in a month to get Kw
-    let batterySize = parseInt(document.getElementById('battery-array-kwhs').innerHTML.replace('kWh', ''));
+    //let batterySize = parseInt(document.getElementById('battery-array-kwhs').innerHTML.replace('kWh', ''));
+    let batterySize = parseFloat(document.getElementById('battery-array-panels').innerHTML.split(', ')[1].replace('kWh', ''))
+    console.log(batterySize);
     let inverterSize = parseFloat(document.getElementById('inverter-options').value); 
     let inverterQuantity = parseInt(document.getElementById('inverter-quantity').value);
 
