@@ -42,15 +42,19 @@
         <div class = "module" id="module-system-information">
           <p class = "big-font" id = "solar-details-text"> Enter optional solar details: </p> 
           <input type="checkbox" id="solar-details" name="solar-details" value="hide">
-          <div id="tilt-azimuth">
+          <div id="optional-details">
             <div id="tilt-wrapper"> 
-              <p class="angle"> Enter tilt angle: </p>
+              <p class="angle"> Tilt angle: </p>
               <input class="angle" id="inp-tilt" type="number" min = "0" max="90" value = "20">
             </div>
             <br>
             <div id="azimuth-wrapper"> 
-              <p class = "angle"> Enter azimuth angle:</p>
+              <p class = "angle"> Azimuth angle:</p>
               <input class="angle" id="inp-azimuth" type="number" min = "0" max="359" value = "180">
+            </div>
+            <div id="derate-wrapper">
+              <p class = "angle"> Derate factor:</p>
+              <input class="angle" id="inp-derate" type="number" step="0.01" min = "-0.05" max="0.99" value = "0.14">
             </div>
           </div> 
           <div id="inverter-details"> 
@@ -117,6 +121,140 @@
             <p id = 'percent-offset' class = 'big-font'> </p>
             <p id = 'solar-production' class = "big-font"> </p>
             <p id = 'solar-consumption' class = "big-font"> </p>
+          </div>
+          <div id = "monthly-results">
+            <table class="tg">
+              <thead>
+                <tr>
+                  <th class="tg-ujgf">Month</th>
+                  <th class="tg-ubgt">Solar Energy Production<br>(kWh)</th>
+                  <th class="tg-ubgt">Total Consumption<br>(kWh)</th>
+                  <th class="tg-ubgt">Solar Consumption<br>(kWh)</th>
+                  <th class="tg-ubgt">Grid Consumption<br>(kWh)</th>
+                  <th class="tg-ubgt">Grid Sellback<br>(kWh)</th>
+                  <th class="tg-ujgf">Days of Gen Use</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr id='month-0'>
+                  <td class="tg-m3bo"><span style="font-weight:bold">January</span></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc consumption"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                </tr>
+                <tr id='month-1'>
+                  <td class="tg-h1fx">February</td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6 consumption"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                </tr>
+                <tr id='month-2'>
+                  <td class="tg-2rcr">March</td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc consumption"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                </tr>
+                <tr id='month-3'>
+                  <td class="tg-h1fx">April</td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6 consumption"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                </tr>
+                <tr id='month-4'>
+                  <td class="tg-2rcr">May</td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc consumption"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                </tr>
+                <tr id='month-5'>
+                  <td class="tg-h1fx">June</td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6 consumption"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                </tr>
+                <tr id='month-6'>
+                  <td class="tg-2rcr">July</td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc consumption"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                </tr>
+                <tr id='month-7'>
+                  <td class="tg-h1fx">August</td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6 consumption"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                </tr>
+                <tr id='month-8'>
+                  <td class="tg-2rcr">September</td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc consumption"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                </tr>
+                <tr id='month-9'>
+                  <td class="tg-h1fx">October</td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6 consumption"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                </tr>
+                <tr id='month-10'>
+                  <td class="tg-2rcr">November</td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc consumption"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                  <td class="tg-jerc"></td>
+                </tr>
+                <tr id='month-11'>
+                  <td class="tg-h1fx">December</td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6 consumption"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                  <td class="tg-huh6"></td>
+                </tr>
+                <tr id='month-all'>
+                  <td class="tg-ujgf">Total</td>
+                  <td class="tg-c6of"></td>
+                  <td class="tg-c6of"></td>
+                  <td class="tg-c6of"></td>
+                  <td class="tg-c6of"></td>
+                  <td class="tg-c6of"></td>
+                  <td class="tg-c6of"></td>
+                </tr>
+              </tbody>
+              </table>
           </div>
           <div id = 'email-results'>
             <h2 style="margin-bottom: 0px;"> Save Results: </h2>

@@ -67,7 +67,7 @@
 
 #module-fortress-system {
     position: relative;
-    height: 600px;
+    height: 900px;
     width: 100%;
     top: 6%;
     display: none;
@@ -96,7 +96,7 @@
     position: absolute;
     margin: 0 auto;
     /* top: calc(var(--results-top) + 40%); */
-    top: 80%;
+    top: 500px;
     width: 100%;
     height: 15%;
 }
@@ -110,7 +110,7 @@
     display: inline-block;
 }
 
-#tilt-azimuth {
+#optional-details {
     display: none;
     top: 25px;
     position: absolute;
@@ -121,7 +121,7 @@
 }
 
 #tilt-wrapper {
-    width: 35%;
+    width: fit-content;
     left: 0%;
     top: 0%;
     position: absolute;
@@ -129,12 +129,20 @@
 }
 
 #azimuth-wrapper {
-    width:50%;
-    left:30%;
+    width: fit-content;
+    left:110px;
     position: absolute;
     top: 0%;
-    margin-left: 20px;
+    margin-left: 15px;
     display: inline-block;
+}
+
+#derate-wrapper {
+    width: fit-content;
+    left: 275px;
+    position: absolute;
+    top: 0%;
+    margin-left: 15px;
 }
 
 .angle {
@@ -162,6 +170,7 @@
 
 #inp-tilt { width: 40px;}
 #inp-azimuth { width: 40px;}
+#inp-derate {width: 43px;}
 
 #inverter-details {
     position: absolute;
@@ -362,6 +371,32 @@ h3 {
     left: 5px;
     position: absolute;
 }
+
+#monthly-results {
+    top: 600px;
+    position: absolute;
+    display: none;
+}
+
+.tg  {border-collapse:collapse;border-spacing:0;}
+            .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+              overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+              font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+            .tg .tg-m3bo{background-color:#409884;border-color:#000000;color:#ffffff;font-family:Arial, Helvetica, sans-serif !important;
+              text-align:left;vertical-align:top}
+            .tg .tg-ujgf{background-color:#ffffff;border-color:#000000;font-family:Arial, Helvetica, sans-serif !important;text-align:left;
+              vertical-align:top}
+            .tg .tg-ubgt{background-color:#ffffff;border-color:#000000;font-family:Arial, Helvetica, sans-serif !important;text-align:center;
+              vertical-align:top}
+            .tg .tg-jerc{background-color:#409884;border-color:#000000;text-align:left;vertical-align:top}
+            .tg .tg-h1fx{background-color:#60d384;border-color:#000000;color:#ffffff;font-family:Arial, Helvetica, sans-serif !important;
+              font-weight:bold;text-align:left;vertical-align:top}
+            .tg .tg-huh6{background-color:#60d384;border-color:#000000;text-align:left;vertical-align:top}
+            .tg .tg-2rcr{background-color:#409884;border-color:#000000;color:#ffffff;font-family:Arial, Helvetica, sans-serif !important;
+              font-weight:bold;text-align:left;vertical-align:top}
+            .tg .tg-c6of{background-color:#ffffff;border-color:#000000;text-align:left;vertical-align:top}
+
 /* CSS For smaller screens (phones/tablets) */
 @media (max-width:730px) {
 
@@ -423,7 +458,7 @@ h3 {
         display: none;
     }
 
-    #tilt-azimuth {
+    #optional-details {
         display: none;
         position: absolute;
         top: 25px;
@@ -536,6 +571,22 @@ h3 {
         top: 70px;
         left: 0px;
         position: absolute;
+    }
+
+    #derate-wrapper {
+        width: fit-content;
+        left: 0px;
+        position: absolute;
+        top: 35px;
+        margin-left: 0px;
+    }
+
+    #monthly-results {
+        top: 600px;
+        position: absolute;
+        display: none;
+        width: 80%;
+        overflow-x: scroll; 
     }
 }
 
