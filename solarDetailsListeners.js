@@ -3,8 +3,10 @@ const solarDetailsChbox = document.getElementById("solar-details");
 solarDetailsChbox.addEventListener("change", function () {
     if (solarDetailsChbox.checked) {
         document.getElementById('optional-details').style.display = 'inline-block';
+        // document.getElementById('optional-details').style.maxHeight = 'fit-content';
     } else {
         document.getElementById('optional-details').style.display = 'none';
+        // document.getElementById('optional-details').style.maxHeight = '0';
     }
 })
 
@@ -26,5 +28,5 @@ document.getElementById('inp-azimuth').addEventListener('change', function () {
 document.getElementById('inp-derate').addEventListener('change', function () {
     let el = document.getElementById('inp-derate');
     if (el.value > 0.99) { el.value = 0.99;} 
-    else if (el.value < -0.05) { el.value = -0.05; }
+    else if (el.value < -0.05) { el.value = -0.5; }
 });

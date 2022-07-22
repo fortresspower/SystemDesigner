@@ -1,11 +1,12 @@
+import {showResult} from './script.js';
+
 //NREL Developer API KEY
 let api_key = "WkDNJ5GuHQJROwhr64ZgH4Hxu2fc51d3FlKijtsD"
 
-const zipCodeInp = document.getElementById("zip-code");
+let apiCallACData = {}; //Variable stores ac data of last PVWatts API Call
 
 //Run API getting solar data for given location
-export function runPVWattsAPI(callBack, coords) {
-    console.log(coords);
+export function runPVWattsAPI(callBack, coords, monthlyConsumption) {
     let system_capacity = "1" 
     let module_type = "1"
     let array_type = "1"
@@ -22,10 +23,11 @@ export function runPVWattsAPI(callBack, coords) {
         fetch(rootURL + requiredParameters + detailParameters + addressParameters)
         .then(response => response.json())
         .then(data => {
+            apiCallACData = data.outputs.ac;
             if(callBack != null){
-                callBack(handlePVWattsOutput(data.outputs.ac));
+                callBack(handlePVWattsOutput(monthlyConsumption));
             } else {
-                handlePVWattsOutput(data.outputs.ac);
+                showResult(handlePVWattsOutput(monthlyConsumption));
             }
         });
     } catch(e) {
@@ -34,7 +36,7 @@ export function runPVWattsAPI(callBack, coords) {
 }
 
 //Function used to process PV Watts return data
-export function handlePVWattsOutput(data) {
+export function handlePVWattsOutput(monthlyConsumption) {
     //Variables keep track of what month we are on to populate monthly results
     let daysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     let currentMonth = 0;
@@ -50,7 +52,7 @@ export function handlePVWattsOutput(data) {
         genOutput: 0,
         genDays: 0,
         solarConsumption: 0,
-        acData: data
+        acData: apiCallACData
     };
 
     let monthlyData = {
@@ -61,7 +63,7 @@ export function handlePVWattsOutput(data) {
         genOutput: 0,
         genDays: 0,
         solarConsumption: 0,
-        acData: data
+        acData: apiCallACData
     };
 
     //Pull input values user put into webpage
@@ -70,16 +72,20 @@ export function handlePVWattsOutput(data) {
     let batterySize = parseFloat(document.getElementById('battery-array-panels').innerHTML.split(', ')[1].replace('kWh', ''))
     let inverterSize = parseFloat(document.getElementById('inverter-options').value); 
     let inverterQuantity = parseInt(document.getElementById('inverter-quantity').value);
-
-    //Consumption array allows a consumption value per month
-    let consumptionArray = Array(12).fill(averageConsumption);
+    let additionalCapacity = parseInt(document.getElementById('inp-additional-capacity').value);    //Consumption array allows a consumption value per month defaulted to average consumption
+    //Every month when input array is not provided
+    let consumptionArray;
+    if (monthlyConsumption.length == 0) {
+        consumptionArray = Array(12).fill(averageConsumption);
+    } else { consumptionArray = monthlyConsumption}
+    
 
     let pvOutput; //Dc array output hourly
     let solarOutflow; //Flow out of PV
     let amountStored; //Flow to battery
     let gridOutflow; //Flow to grid
     let solarConsumption; //Instant solar consumption
-    let batteryCapacity = batterySize + (data[0]* solarArraySize/1000) - averageConsumption; //Capacity of battery before current hour runs
+    let batteryCapacity = batterySize + (apiCallACData[0]* solarArraySize/1000) - averageConsumption; //Capacity of battery before current hour runs
     let genChargeStart = 0.2; //What battery capactiy to start charging with generator at
     let genSize = inverterQuantity * inverterSize; //generator charging rate in kW
     let genOutput; //Power generated from grid
@@ -94,12 +100,12 @@ export function handlePVWattsOutput(data) {
 
     //Iterate over all hours of dc solar array output
     //Continously update systemData object with calculated values in for loop mimicking excel
-    for (let i = 1; i < data.length; i++) {
-        if (data[i] != 0) { //Make sure value is not 0
-            if ((data[i] * solarArraySize) / 1000 > inverterSize * inverterQuantity) { //Check for inverter clipping
+    for (let i = 1; i < apiCallACData.length; i++) {
+        if (apiCallACData[i] != 0) { //Make sure value is not 0
+            if ((apiCallACData[i] * solarArraySize) / 1000 > (inverterSize * inverterQuantity) + additionalCapacity) { //Check for inverter clipping
                 pvOutput = inverterSize * inverterQuantity; 
             } else {
-                pvOutput = (data[i] * solarArraySize) / 1000; //Store solar array output data in kW
+                pvOutput = (apiCallACData[i] * solarArraySize) / 1000; //Store solar array output data in kW
             }
         } else {
             pvOutput = 0;
@@ -182,7 +188,7 @@ function updateMonthlyTable(monthIndex, data, averageConsumption) {
     var tableCells = document.getElementById('month-' + monthIndex).children;
     //console.log(document.getElementById('month-' + monthIndex).children);
     tableCells[1].innerHTML = Math.round(data['pvOutput']);
-    tableCells[2].innerHTML = averageConsumption;
+    tableCells[2].innerHTML = Math.round(averageConsumption);
     tableCells[2].setAttribute('contenteditable',"true"); //Allow users to modify monthly consumption
     //Add event listener to change total when a month value is changed
     if (monthIndex != ' all') {

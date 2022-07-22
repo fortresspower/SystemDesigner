@@ -27,12 +27,12 @@ export function showResult(res) {
 
     //Show result text 
     resultModule.style.display = 'block';
+    //Show recalc wrapper for monthly results
+    document.getElementById('recalc-wrapper').style.display = 'block';
     //Show monthly results table
     document.getElementById('monthly-results').style.display = 'block';
-    //Initialize ability to click on the consumption of any month in the table
-    //monthlyConsumptionChange()
     //Show email input and submit system data button
-    document.getElementById('email-results').style.display = 'flex';
+    document.getElementById('email-results').style.display = 'block';
     
 }
 
