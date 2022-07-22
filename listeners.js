@@ -1,5 +1,6 @@
 import {runUtilityAPI} from './utilityRates-API.js';
 import {runGeoAPI} from './googleMaps-API.js';
+import {runPVWattsAPI} from './pvWatts-API.js';
 
 //Set up references to html elements to add event listeners  
 let invQuant = document.getElementById("inverter-quantity");
@@ -9,12 +10,49 @@ let batteryOptions = document.getElementById('battery-options');
 let batterySlider = document.getElementById('battery-array-slider');
 let solarSlider = document.getElementById('solar-array-slider');
 
+//On hover have total consumptionIcon show popup
+let consumptionIcon = document.getElementById('consumption-icon');
+consumptionIcon.addEventListener('mouseover', function() {
+    document.getElementById("consumption-popup").classList.toggle("show");
+    let popContainer = document.getElementById("consumption-popup-wrapper");
+    let coords = getCoords(consumptionIcon);
+    console.log(coords);
+    console.log(coords.left - getCoords(document.getElementById('monthly-results')).left);
+    popContainer.style.left = (coords.left + 5 - getCoords(document.getElementById('monthly-results')).left).toString() + 'px';
+    console.log(popContainer.style.left);
+    //popContainer.style.top = coords.top;
+});
+
+//Hide popup on mouse leave
+consumptionIcon.addEventListener('mouseout', function() {
+    document.getElementById("consumption-popup").classList.toggle("show");
+});
+
+//Function retrievs top and left coords of an element relative to whole page
+function getCoords(elem) { // crossbrowser version
+    var box = elem.getBoundingClientRect();
+
+    var body = document.body;
+    var docEl = document.documentElement;
+
+    var scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+    var scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+
+    var clientTop = docEl.clientTop || body.clientTop || 0;
+    var clientLeft = docEl.clientLeft || body.clientLeft || 0;
+
+    var top  = box.top +  scrollTop - clientTop;
+    var left = box.left + scrollLeft - clientLeft;
+
+    return { top: Math.round(top), left: Math.round(left) };
+}
+
 //Add event listener to bound inverter quantity and update solar array slider default val
 invQuant.addEventListener('change', function () {
     updateSolarSlider();
     batterySlider.setAttribute('max', 3*invQuant.value);
     batteryQuant.max = 3 * invQuant.value;
-})
+});
 
 //Add event listener that updates inverter quantity and solar array slider and text when inverter dropwdown option changes
 invOpt.addEventListener('change', function () {
@@ -133,6 +171,9 @@ function updateSolarSlider() {
     let kWVal = Math.round(parseFloat(invOpt.value) * parseFloat(invQuant.value) * 10) /10;
     //Make sure solar array can be no bigger than 130% inverter size
     solarSlider.max = 1.3 * Math.ceil(kWVal / 0.43);
+    if (invOpt.value == '12') {
+        solarSlider.max = Math.ceil(parseFloat(invQuant.value) * 18/0.43); //12kw inverter should be capped at 18kw
+    }
     //Calculate number of panels based on 0.43 kw sized ones
     solarSlider.value =  Math.ceil(kWVal / 0.43);
     //Update text next to solar slider
@@ -171,14 +212,16 @@ export function createPVWattsListeners() {
     //Get updating rate slider to recall solar api
     document.getElementById('kwh-slider').addEventListener('input', function() {
         if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
-            runGeoAPI();
+            // handlePVWattsOutput([]);
+            runGeoAPI([]);
             //runPVWattsAPI(showResult);
         }
     });
 
     document.getElementById('residential-rate-inp').addEventListener('change', function() {
         if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
-            runGeoAPI();
+            //handlePVWattsOutput([]);
+            runGeoAPI([]);
             //runPVWattsAPI(showResult);
         }
     });
@@ -186,7 +229,8 @@ export function createPVWattsListeners() {
     //Set up button listener to call solar api
     document.getElementById('solar-api').addEventListener('click', function() {
         if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
-            runGeoAPI();
+            //handlePVWattsOutput([]);
+            runGeoAPI([]);
             //runPVWattsAPI(showResult);
         }
     });
@@ -194,7 +238,8 @@ export function createPVWattsListeners() {
     //have solar slider recall solar api recalculting data
     solarSlider.addEventListener('input', function() {
         if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
-            runGeoAPI();
+            //handlePVWattsOutput([]);
+            runGeoAPI([]);
             //runPVWattsAPI(showResult);
         }
     });
@@ -202,8 +247,18 @@ export function createPVWattsListeners() {
     //have battery slider recall battery api recalculting data
     batterySlider.addEventListener('input', function() {
         if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
-            runGeoAPI();
+            //handlePVWattsOutput([]);
+            runGeoAPI([]);
             //runPVWattsAPI(showResult);
         }
+    });
+
+    document.getElementById('recalc-table').addEventListener('click', function() {
+        let monthlyConsumption = [];
+        for (let i = 0; i < 12; i++) {
+            monthlyConsumption.push(parseFloat(document.getElementById('month-' + i.toString()).children[2].innerHTML) / 730);
+        }
+        console.log(monthlyConsumption);
+        runGeoAPI(monthlyConsumption);
     });
 }
