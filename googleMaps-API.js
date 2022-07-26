@@ -8,7 +8,7 @@ const zipCodeInp = document.getElementById("zip-code");
 const billInp = document.getElementById("monthly-bill");
 
 //Function calls the google geocoder api which turns an address into lat and long coordinates
-export function runGeoAPI() {
+export function runGeoAPI(monthlyConsumption) {
     if (zipCodeInp.value.length != 0 && billInp.value.length != 0) {
         let address = zipCodeInp.value.replaceAll(' ', '+').replaceAll(',', '+').replaceAll('++', '+');
         console.log(address);
@@ -18,7 +18,7 @@ export function runGeoAPI() {
         try {
             fetch(geo_root_url + geo_parameters)
             .then(response => response.json())
-            .then(data => handleGeoResult(data));
+            .then(data => handleGeoResult(data, monthlyConsumption));
         } catch(e) {
             console.log(e);
         }
@@ -29,8 +29,8 @@ export function runGeoAPI() {
 }
 
 //Function takes the lat and long results from the geocoder api and runs PV Watts with those values
-function handleGeoResult(res) {
+function handleGeoResult(res, monthlyConsumption) {
     console.log(res.results[0].geometry.location);
     let location = res.results[0].geometry.location;
-    return runPVWattsAPI(showResult, location);
+    return runPVWattsAPI(showResult, location, monthlyConsumption);
 }

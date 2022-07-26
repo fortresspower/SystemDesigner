@@ -1,6 +1,9 @@
 import {createPVWattsListeners} from './listeners.js';
 import {createUtilityListeners} from './listeners.js';
+import {getAuthorization} from "./zohoSheets-API.js";
 
+document.getElementById('test-zoho').addEventListener('click', getAuthorization());
+console.log(window.location.hostname);
 //Set up utlity rate API listeners
 createUtilityListeners();
 
