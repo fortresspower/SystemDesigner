@@ -20,7 +20,7 @@
 
 <body>
   <div id="system-designer">
-    <button id="test-zoho"> </button>
+    <button id="test-zoho" style="width: fit-content"> Test Zoho</button>
     <h1 id ='title-text'> Fortress System Designer </h1>
     <img src="fortress_logo.png" id="fortress-logo" alt="fortressLogo">
     <div id = 'test-info'>
@@ -63,34 +63,86 @@
               <input class="angle" id="inp-additional-capacity" type="number" step="1" min="0" value="0">
             </div>
           </div> 
-          <div id="inverter-details"> 
-            <div id = inverter-options-wrapper>
-              <label for="inverter-options" class = "big-font">Choose an inverter size:</label> 
-              <select id="inverter-options">
-                <option hidden disabled selected value> -- select an option -- </option>
-                <option value="7.6"> 7.6 kW</option>
-                <option value="12"> 12 kW</option>
-                <option value="125"> 125 kW</option>
-              </select>
-            </div>
-            <div id = inverter-quantity-wrapper>
-              <label id = "label-inverter-quantity" for="inverter-quantity" class = "big-font"> Enter the inverter amount: </label> 
-              <input id = "inverter-quantity" type="number" min = '0' value = "0" style = 'width: 50px'>
+          <div id="sub-array">
+            <p class = "big-font" id = "sub-array-text"> Optional Sub Arrays: </p> 
+            <input type="checkbox" id="sub-array-box" name="sub-array-details" value="hide">
+            <div id="sub-array-details"> 
+                <div id="array1-wrapper" class="sub-array"> 
+                  <div id="array1-size">
+                    <p class="angle"> Sub Array 1 Size(kW): </p>
+                    <input class="angle" id="inp-size-array1" type="number" min = "0" value = "0" style="width: 50px">
+                  </div>
+                  <div id="array1-angle">
+                    <p class="angle"> Tilt Angle: </p>
+                    <input class="angle" id="inp-angle-array1" type="number" min = "0" value = "0" style="width: 50px">
+                  </div>
+                  <div id="array1-orientation">
+                    <p class="angle"> Orientation: </p>
+                    <input class="angle" id="inp-orientation-array1" type="number" min = "0" value = "0" style="width: 50px">
+                  </div>
+                </div>
+
+                <div id="array2-wrapper" class="sub-array"> 
+                  <div id="array2-size">
+                    <p class="angle"> Sub Array 2 Size(kW): </p>
+                    <input class="angle" id="inp-size-array2" type="number" min = "0" value = "0" style="width: 50px">
+                  </div>
+                  <div id="array2-angle">
+                    <p class="angle"> Tilt Angle: </p>
+                    <input class="angle" id="inp-angle-array2" type="number" min = "0" value = "0" style="width: 50px">
+                  </div>
+                  <div id="array2-orientation">
+                    <p class="angle"> Orientation: </p>
+                    <input class="angle" id="inp-orientation-array2" type="number" min = "0" value = "0" style="width: 50px">
+                  </div>
+                </div>
+
+                <div id="array3-wrapper" class="sub-array"> 
+                  <div id="array3-size">
+                    <p class="angle"> Sub Array 3 Size(kW): </p>
+                    <input class="angle" id="inp-size-array3" type="number" min = "0" value = "0" style="width: 50px">
+                  </div>
+                  <div id="array3-angle">
+                    <p class="angle"> Tilt Angle: </p>
+                    <input class="angle" id="inp-angle-array3" type="number" min = "0" value = "0" style="width: 50px">
+                  </div>
+                  <div id="array3-orientation">
+                    <p class="angle"> Orientation: </p>
+                    <input class="angle" id="inp-orientation-array3" type="number" min = "0" value = "0" style="width: 50px">
+                  </div>
+                </div>
             </div>
           </div>
-          <div id="battery-details"> 
-            <div id = battery-options-wrapper> 
-              <label for="battery-options" class = "big-font">Choose a Fortress Battery model:</label> 
-              <select id="battery-options">
-                <option hidden disabled selected value> -- select an option -- </option>
-                <option value="eFlex" power="5.4" max="16"> eFlex (5.4 kWh) </option>
-                <option value="eVault Max" power="18.5" max="20"> eVault Max (18.5 kWh) </option>
-                <option value="eSpire" power="233" max="15"> eSpire (233 kWh) </option>
-              </select>
+          <div id="inverter-battery">
+            <div id="inverter-details"> 
+              <div id = inverter-options-wrapper>
+                <label for="inverter-options" class = "big-font">Choose an inverter size:</label> 
+                <select id="inverter-options">
+                  <option hidden disabled selected value> -- select an option -- </option>
+                  <option value="7.6"> 7.6 kW</option>
+                  <option value="12"> 12 kW</option>
+                  <option value="125"> 125 kW</option>
+                </select>
+              </div>
+              <div id = inverter-quantity-wrapper>
+                <label id = "label-inverter-quantity" for="inverter-quantity" class = "big-font"> Enter the inverter amount: </label> 
+                <input id = "inverter-quantity" type="number" min = '0' value = "0" style = 'width: 50px'>
+              </div>
             </div>
-            <div id="battery-quantity-wrapper">
-              <label id = "label-battery-quantity" for="battery-quantity" class = "big-font"> Enter the battery amount: </label> 
-              <input id = "battery-quantity" type="number" min = '0' value = "0" style = 'width: 50px'>
+            <div id="battery-details"> 
+              <div id = battery-options-wrapper> 
+                <label for="battery-options" class = "big-font">Choose a Fortress Battery model:</label> 
+                <select id="battery-options">
+                  <option hidden disabled selected value> -- select an option -- </option>
+                  <option value="eFlex" power="5.4" max="16"> eFlex (5.4 kWh) </option>
+                  <option value="eVault Max" power="18.5" max="20"> eVault Max (18.5 kWh) </option>
+                  <option value="eSpire" power="233" max="15"> eSpire (233 kWh) </option>
+                </select>
+              </div>
+              <div id="battery-quantity-wrapper">
+                <label id = "label-battery-quantity" for="battery-quantity" class = "big-font"> Enter the battery amount: </label> 
+                <input id = "battery-quantity" type="number" min = '0' value = "0" style = 'width: 50px'>
+              </div>
             </div>
           </div>
         </div>

@@ -1,12 +1,49 @@
 const solarDetailsChbox = document.getElementById("solar-details");
+const subArrayChbox = document.getElementById('sub-array-box');
+
 //Show/Hide optional solar details when solar details checkbox value changes
 solarDetailsChbox.addEventListener("change", function () {
+    let currentMargin = parseInt(document.getElementById('inverter-battery').style.marginTop.replace('px',''));
+    if (isNaN(currentMargin)) { 
+        currentMargin = 0;
+    }
+    let marginVal = 50;
+
     if (solarDetailsChbox.checked) {
         document.getElementById('optional-details').style.display = 'inline-block';
+        document.getElementById('inverter-battery').style.marginTop = currentMargin + marginVal + 'px';
+        //document.getElementById('battery-details').style.marginTop = '140px';
+        document.getElementById('sub-array').style.marginTop = marginVal + 'px';
+        document.getElementById('module-fortress-system').style.marginTop = (currentMargin + marginVal).toString() + 'px';
         // document.getElementById('optional-details').style.maxHeight = 'fit-content';
     } else {
         document.getElementById('optional-details').style.display = 'none';
+        document.getElementById('inverter-battery').style.marginTop = currentMargin - marginVal + 'px';
+        //document.getElementById('battery-details').style.marginTop = '90px';
+        document.getElementById('sub-array').style.marginTop = '0px';
+        document.getElementById('module-fortress-system').style.marginTop = currentMargin - marginVal + 'px';
         // document.getElementById('optional-details').style.maxHeight = '0';
+    }
+})
+
+//Show/Hide optional sub array details when sub array checkbox value changes
+subArrayChbox.addEventListener("change", function () {
+    let marginVal = 130;
+
+    let currentMargin = parseInt(document.getElementById('inverter-battery').style.marginTop);
+    if (isNaN(currentMargin)) { 
+        currentMargin = 0;
+    }
+
+    console.log(currentMargin);
+    if (subArrayChbox.checked) {
+        document.getElementById('sub-array-details').style.display = 'flex';
+        document.getElementById('inverter-battery').style.marginTop = (currentMargin + marginVal).toString() + 'px';
+        document.getElementById('module-fortress-system').style.marginTop = (currentMargin + marginVal).toString() + 'px';
+    } else {
+        document.getElementById('sub-array-details').style.display = 'none';
+        document.getElementById('inverter-battery').style.marginTop = currentMargin - marginVal + 'px';
+        document.getElementById('module-fortress-system').style.marginTop = currentMargin - marginVal + 'px';
     }
 })
 

@@ -2,8 +2,8 @@ import {createPVWattsListeners} from './listeners.js';
 import {createUtilityListeners} from './listeners.js';
 import {getAuthorization} from "./zohoSheets-API.js";
 
-document.getElementById('test-zoho').addEventListener('click', getAuthorization());
-console.log(window.location.hostname);
+
+//console.log(window.location.hostname);
 //Set up utlity rate API listeners
 createUtilityListeners();
 
@@ -36,6 +36,8 @@ export function showResult(res) {
     document.getElementById('monthly-results').style.display = 'block';
     //Show email input and submit system data button
     document.getElementById('email-results').style.display = 'block';
+    
+    return res;
     
 }
 

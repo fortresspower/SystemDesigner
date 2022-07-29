@@ -6,12 +6,21 @@ let api_key = "WkDNJ5GuHQJROwhr64ZgH4Hxu2fc51d3FlKijtsD"
 let apiCallACData = {}; //Variable stores ac data of last PVWatts API Call
 
 //Run API getting solar data for given location
-export function runPVWattsAPI(callBack, coords, monthlyConsumption) {
+export function runPVWattsAPI(callBack, coords, monthlyConsumption, tilt, azimuth, solarArraySize) {
     let system_capacity = "1" 
     let module_type = "1"
     let array_type = "1"
-    let tilt = document.getElementById('inp-tilt').value.toString();
-    let azimuth = document.getElementById('inp-azimuth').value.toString();
+
+    if (tilt === undefined) {
+        tilt = document.getElementById('inp-tilt').value.toString();
+    }
+    if (azimuth === undefined) {
+        azimuth = document.getElementById('inp-azimuth').value.toString();
+    }
+    if (solarArraySize === undefined) {
+        solarArraySize = document.getElementById('solar-array-slider').value * 0.43;
+    }
+    
     let derate = (document.getElementById('inp-derate').value * 100).toString(); //Losses in percent
 
     let rootURL = "https://developer.nrel.gov/api/pvwatts/v6.json?"
@@ -20,14 +29,17 @@ export function runPVWattsAPI(callBack, coords, monthlyConsumption) {
     let addressParameters = "&lat=" + coords.lat + "&lon=" + coords.lng;
 
     try {
-        fetch(rootURL + requiredParameters + detailParameters + addressParameters)
+        return fetch(rootURL + requiredParameters + detailParameters + addressParameters)
         .then(response => response.json())
         .then(data => {
+            console.log(data);
             apiCallACData = data.outputs.ac;
             if(callBack != null){
-                callBack(handlePVWattsOutput(monthlyConsumption));
+                callBack(handlePVWattsOutput(monthlyConsumption, solarArraySize));
             } else {
-                showResult(handlePVWattsOutput(monthlyConsumption));
+                console.log("callback less run");
+                console.log("solarArraySize: " + solarArraySize);
+                return handlePVWattsOutput(monthlyConsumption, solarArraySize);
             }
         });
     } catch(e) {
@@ -36,7 +48,7 @@ export function runPVWattsAPI(callBack, coords, monthlyConsumption) {
 }
 
 //Function used to process PV Watts return data
-export function handlePVWattsOutput(monthlyConsumption) {
+export function handlePVWattsOutput(monthlyConsumption, solarArraySize) {
     //Variables keep track of what month we are on to populate monthly results
     let daysPerMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     let currentMonth = 0;
@@ -67,7 +79,10 @@ export function handlePVWattsOutput(monthlyConsumption) {
     };
 
     //Pull input values user put into webpage
-    let solarArraySize = document.getElementById('solar-array-slider').value * 0.43;
+    // if (solarArraySize === undefined) {
+    //     solarArraySize = document.getElementById('solar-array-slider').value * 0.43;
+    // }
+
     let averageConsumption = parseInt(document.getElementById('module-kwh').getAttribute('consumption')) / 730; //Your average monthly consumption divided by hours in a month to get Kw
     let batterySize = parseFloat(document.getElementById('battery-array-panels').innerHTML.split(', ')[1].replace('kWh', ''))
     let inverterSize = parseFloat(document.getElementById('inverter-options').value); 
@@ -210,7 +225,7 @@ function updateMonthlyTable(monthIndex, data, averageConsumption) {
 }
 
 //Updates annual data everytime a month is done running
-function updateAnnualData(annual, monthly) {
+export function updateAnnualData(annual, monthly) {
     Object.keys(annual).forEach(key => {
         if (key != 'acData') {
             annual[key] = annual[key] + monthly[key];

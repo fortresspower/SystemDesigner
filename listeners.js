@@ -1,6 +1,10 @@
 import {runUtilityAPI} from './utilityRates-API.js';
 import {runGeoAPI} from './googleMaps-API.js';
 import {runPVWattsAPI} from './pvWatts-API.js';
+import {updateAnnualData} from './pvWatts-API.js'
+import { showResult } from './script.js';
+import {getAuthorization} from "./zohoSheets-API.js";
+import {getAccessToken} from "./zohoSheets-API.js";
 
 //Set up references to html elements to add event listeners  
 let invQuant = document.getElementById("inverter-quantity");
@@ -9,6 +13,20 @@ let batteryQuant = document.getElementById("battery-quantity");
 let batteryOptions = document.getElementById('battery-options');
 let batterySlider = document.getElementById('battery-array-slider');
 let solarSlider = document.getElementById('solar-array-slider');
+
+
+document.getElementById('test-zoho').addEventListener('click', () => {
+    testGeo().then(response => console.log(response));
+})
+
+// document.getElementById('test-zoho').addEventListener('click', getAuthorization);
+// window.addEventListener('load', function () {
+//     console.log("checking load")
+//     if (window.location.href.includes("code")) {
+//         console.log(new URLSearchParams(window.location.search).get('code'));
+//         getAccessToken();   
+//     }
+// });
 
 //On hover have total consumptionIcon show popup
 let consumptionIcon = document.getElementById('consumption-icon');
@@ -213,7 +231,8 @@ export function createPVWattsListeners() {
     document.getElementById('kwh-slider').addEventListener('input', function() {
         if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
             // handlePVWattsOutput([]);
-            runGeoAPI([]);
+            //runGeoAPI([]);
+            runGeoAPI().then(coords => runPVWattsAPI(showResult, coords, []));
             //runPVWattsAPI(showResult);
         }
     });
@@ -221,25 +240,79 @@ export function createPVWattsListeners() {
     document.getElementById('residential-rate-inp').addEventListener('change', function() {
         if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
             //handlePVWattsOutput([]);
-            runGeoAPI([]);
+            //runGeoAPI([]);
             //runPVWattsAPI(showResult);
+            runGeoAPI().then(coords => runPVWattsAPI(showResult, coords, []));
         }
     });
 
     //Set up button listener to call solar api
     document.getElementById('solar-api').addEventListener('click', function() {
-        if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
+        let result1;
+        let result2;
+        let result3;
+
+        if (invQuant.value != 0 && batteryQuant.value != 0 ) {
+            let systemData = {
+                pvOutput: 0,
+                solarOutflow: 0,
+                amountStored: 0,
+                gridOutflow: 0,
+                genOutput: 0,
+                genDays: 0,
+                solarConsumption: 0
+            };
+
+            if (document.getElementById('inp-size-array1').value !== "0" ) {
+                console.log('params run');
+                runGeoAPI().then(coords => runPVWattsAPI(null, coords, [], document.getElementById('inp-angle-array1').value, document.getElementById('inp-orientation-array1').value, document.getElementById('inp-size-array1').value)
+                .then(res => {
+                    console.log(res);
+                    updateAnnualData(systemData, res);
+                }) //Save result from  first sub array call
+                );
+            } 
+            
+            if (document.getElementById('inp-size-array2').value !== "0" ) {
+                runGeoAPI().then(coords => runPVWattsAPI(null, coords, [], document.getElementById('inp-angle-array2').value, document.getElementById('inp-orientation-array2').value, document.getElementById('inp-size-array2').value)
+                .then(res => {
+                    console.log(res);
+                    updateAnnualData(systemData, res);
+                }) //Save result from  first sub array call
+                );
+            }
+
+            if (document.getElementById('inp-size-array3').value !== "0" ) {
+                runGeoAPI().then(coords => runPVWattsAPI(null, coords, [], document.getElementById('inp-angle-array3').value, document.getElementById('inp-orientation-array3').value, document.getElementById('inp-size-array3').value)
+                .then(res => {
+                    console.log(res);
+                    updateAnnualData(systemData, res);
+                }) //Save result from  first sub array call
+                );
+            }
+
+            console.log(systemData);
+            showResult(systemData);
+
+        }
+        else {
             //handlePVWattsOutput([]);
             runGeoAPI([]);
             //runPVWattsAPI(showResult);
         }
+        
+        
+        // if (document.getElementById('inp-size-array3').value !== "0" ) {
+        //     runGeoAPI([], document.getElementById('inp-angle-array3').value, document.getElementById('array3-orientation').value, document.getElementById('inp-size-array3').value);
+        // }
+        
     });
 
     //have solar slider recall solar api recalculting data
     solarSlider.addEventListener('input', function() {
         if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
             //handlePVWattsOutput([]);
-            runGeoAPI([]);
+            runGeoAPI().then(coords => runPVWattsAPI(showResult, coords, []));
             //runPVWattsAPI(showResult);
         }
     });
@@ -248,7 +321,7 @@ export function createPVWattsListeners() {
     batterySlider.addEventListener('input', function() {
         if (solarSlider.value.length != 0 && batterySlider.value.length != 0) {
             //handlePVWattsOutput([]);
-            runGeoAPI([]);
+            runGeoAPI().then(coords => runPVWattsAPI(showResult, coords, []));
             //runPVWattsAPI(showResult);
         }
     });
@@ -259,6 +332,6 @@ export function createPVWattsListeners() {
             monthlyConsumption.push(parseFloat(document.getElementById('month-' + i.toString()).children[2].innerHTML) / 730);
         }
         console.log(monthlyConsumption);
-        runGeoAPI(monthlyConsumption);
+        runGeoAPI().then(coords => runPVWattsAPI(showResult, coords, monthlyConsumption));
     });
 }

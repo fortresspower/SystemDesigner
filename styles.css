@@ -1,5 +1,8 @@
 :root {
     --results-top: 40%;
+    --kwh-height: 100px;
+    --system-height: 250px;
+    --fortress-height: 900px;
   }
 
 #system-designer {
@@ -10,7 +13,7 @@
 }
 
 #app-content {
-    width: 60vw;
+    width: 75vw;
     height: 100%;
     /* margin: 0 auto; */
     margin-left: auto;
@@ -54,12 +57,12 @@
 }
 
 #module-kwh {
-    height: 100px;
+    height: var(--kwh-height);
 }
 
 #module-system-information {
     position: relative;
-    height: 200px;
+    height: var(--system-height);
     width: 100%;
     top: 120px;
     display: none;
@@ -67,9 +70,9 @@
 
 #module-fortress-system {
     position: relative;
-    height: 900px;
+    height: var(--fortress-height);
     width: 100%;
-    top: 100px;
+    top: 50px;
     display: none;
 }
 
@@ -115,8 +118,37 @@
     position: absolute;
     height: fit content;
     margin-bottom: 5px;
-    width: 100%;
+    width: 90%;
+    left:10%;
+}
+.sub-array {
+    width: 33.3%;
+    float: left;
+}
 
+#sub-array {
+    width: 100%;
+    top: 25px;
+    height: 20px;
+    position: absolute;
+}
+
+#sub-array-box {
+    position: absolute;
+    left: 224px;
+    top: 0px;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+}
+
+#sub-array-details {
+    display: none;
+    top: 25px;
+    position: absolute;
+    height: fit content;
+    margin-bottom: 5px;
+    width: 100%;
 }
 
 #tilt-wrapper {
@@ -179,11 +211,18 @@
 #inp-derate {width: 43px;}
 #inp-additional-capacity {width: 40px;}
 
+#inverter-battery {
+    position: absolute;
+    width: 100%;
+    height: 130px;
+    top: 50px;
+}
+
 #inverter-details {
     position: absolute;
-    top: 70px; 
+    top: 0px; 
     width: 100%;
-    margin-top: 10px;
+    /* margin-top: 30px; */
 }
 
 #label-inverter-quantity {
@@ -192,8 +231,8 @@
 
 #battery-details {
     position: absolute;
-    top: 130px;
-    margin-top: 10px;
+    top: 60px; 
+    /* margin-top: 90px; */
     width: 100%;
 }
 
@@ -249,6 +288,14 @@
 }
 
 #solar-details-text {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    margin-top: 0px;
+    display: inline-block;
+}
+
+#sub-array-text {
     position: absolute;
     left: 0px;
     top: 0px;
