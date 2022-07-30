@@ -1,9 +1,24 @@
-import {showResult} from './script.js';
+import {isSubArray} from './listeners.js';
 
 //NREL Developer API KEY
 let api_key = "WkDNJ5GuHQJROwhr64ZgH4Hxu2fc51d3FlKijtsD"
 
 let apiCallACData = {}; //Variable stores ac data of last PVWatts API Call
+
+let subArrayMonthlyData = {};
+//Initialize sub array monthly data to track sub array sums to update table
+for (let i= 0; i < 12; i++) {
+    subArrayMonthlyData[i] = {
+        pvOutput: 0,
+        solarOutflow: 0,
+        amountStored: 0,
+        gridOutflow: 0,
+        genOutput: 0,
+        genDays: 0,
+        solarConsumption: 0
+    };
+}
+console.log(subArrayMonthlyData)
 
 //Run API getting solar data for given location
 export function runPVWattsAPI(callBack, coords, monthlyConsumption, tilt, azimuth, solarArraySize) {
@@ -21,7 +36,7 @@ export function runPVWattsAPI(callBack, coords, monthlyConsumption, tilt, azimut
         solarArraySize = document.getElementById('solar-array-slider').value * 0.43;
     }
     
-    let derate = (document.getElementById('inp-derate').value * 100).toString(); //Losses in percent
+    let derate = Math.round(document.getElementById('inp-derate').value * 100, 1).toString(); //Losses in percent
 
     let rootURL = "https://developer.nrel.gov/api/pvwatts/v6.json?"
     let requiredParameters = "api_key="+api_key+"&system_capacity="+system_capacity+"&module_type="+ module_type + "&array_type=" + array_type + "&timeframe=hourly"
@@ -32,7 +47,7 @@ export function runPVWattsAPI(callBack, coords, monthlyConsumption, tilt, azimut
         return fetch(rootURL + requiredParameters + detailParameters + addressParameters)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            // console.log(data);
             apiCallACData = data.outputs.ac;
             if(callBack != null){
                 callBack(handlePVWattsOutput(monthlyConsumption, solarArraySize));
@@ -182,31 +197,53 @@ export function handlePVWattsOutput(monthlyConsumption, solarArraySize) {
 
             if (daysPast == daysPerMonth[currentMonth]){ //check if month is complete
                 //Populate table row with data
-                updateMonthlyTable(currentMonth, monthlyData, consumptionArray[currentMonth] * 730);
-
-                //Add completed month data to annual, reset month data
-                systemData = updateAnnualData(systemData, monthlyData);
-                monthlyData = resetMonthlyData(monthlyData);
+                if (!isSubArray()) {  //if not in sub array mode
+                    console.log('NOT SUB ARRAY MODE');
+                    updateMonthlyTable(currentMonth, monthlyData, consumptionArray[currentMonth] * 730);
+                    //Add completed month data to annual, reset month data
+                    systemData = updateAnnualData(systemData, monthlyData);
+                    monthlyData = resetMonthlyData(monthlyData);
+                }
+                else { //save monthly data to aggregate it after all sub arrays are done
+                    systemData = updateAnnualData(systemData, monthlyData); 
+                    Object.keys(subArrayMonthlyData[currentMonth]).forEach(key => { //Save monthly data
+                        subArrayMonthlyData[currentMonth][key] = subArrayMonthlyData[currentMonth][key] + monthlyData[key];
+                    });
+                    monthlyData = resetMonthlyData(monthlyData);
+                }
                 daysPast = 0; //Reset days iterated over this month
                 currentMonth++; //Move on to next month
+
             }
         }
     }
 
-    //Update total row off table with systemData
-    updateMonthlyTable('all', systemData, consumptionArray.reduce((a, b) => a + b, 0) * 730);
-    return systemData; //Equivalent to last row of hourly energy flow spreadsheet
+    //Update total row of table with systemData
+    if (!isSubArray()) {
+        updateMonthlyTable('all', systemData, consumptionArray.reduce((a, b) => a + b, 0) * 730);
+    } 
+    // else { 
+    //     updateMonthlyTable('all', subArrayMonthlyData, consumptionArray.reduce((a, b) => a + b, 0) * 730);
+    // }
+    return systemData; 
+}
+
+export function updateTableSubArrays(consumption) {
+    for (let i = 0; i < 12; i++) {
+        updateMonthlyTable(i, subArrayMonthlyData[i], consumption);
+    }
 }
 
 //Retrievs appropriate row of monthly results table and populates cells
-function updateMonthlyTable(monthIndex, data, averageConsumption) {
+export function updateMonthlyTable(monthIndex, data, averageConsumption) {
     var tableCells = document.getElementById('month-' + monthIndex).children;
     //console.log(document.getElementById('month-' + monthIndex).children);
     tableCells[1].innerHTML = Math.round(data['pvOutput']);
     tableCells[2].innerHTML = Math.round(averageConsumption);
-    tableCells[2].setAttribute('contenteditable',"true"); //Allow users to modify monthly consumption
+    // tableCells[2].setAttribute('contenteditable',"true"); //Allow users to modify monthly consumption
     //Add event listener to change total when a month value is changed
     if (monthIndex != ' all') {
+        tableCells[2].setAttribute('contenteditable',"true"); //Allow users to modify monthly consumption
         tableCells[2].addEventListener('input', (event) => {
             let sum = 0;
             //Compute sum of month consumption values

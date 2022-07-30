@@ -1,7 +1,8 @@
 import {runUtilityAPI} from './utilityRates-API.js';
 import {runGeoAPI} from './googleMaps-API.js';
-import {runPVWattsAPI} from './pvWatts-API.js';
-import {updateAnnualData} from './pvWatts-API.js'
+import {runPVWattsAPI, updateTableSubArrays, updateAnnualData, updateMonthlyTable} from './pvWatts-API.js';
+// import {updateAnnualData} from './pvWatts-API.js';
+// import {updateTableSubArrays} from './pvWatts-API.js';
 import { showResult } from './script.js';
 import {getAuthorization} from "./zohoSheets-API.js";
 import {getAccessToken} from "./zohoSheets-API.js";
@@ -34,10 +35,7 @@ consumptionIcon.addEventListener('mouseover', function() {
     document.getElementById("consumption-popup").classList.toggle("show");
     let popContainer = document.getElementById("consumption-popup-wrapper");
     let coords = getCoords(consumptionIcon);
-    console.log(coords);
-    console.log(coords.left - getCoords(document.getElementById('monthly-results')).left);
     popContainer.style.left = (coords.left + 5 - getCoords(document.getElementById('monthly-results')).left).toString() + 'px';
-    console.log(popContainer.style.left);
     //popContainer.style.top = coords.top;
 });
 
@@ -225,6 +223,15 @@ export function createUtilityListeners() {
         }
     });
 }
+//Helper determines if there are at least two sub arrays present
+export function isSubArray() {
+    let c = 0;
+    for (let i = 1; i < 4; i++) {
+        if (document.getElementById('inp-size-array'+i).value !== "0" ) {c++; }
+    }
+    return c >= 2;
+}
+
 
 export function createPVWattsListeners() {
     //Get updating rate slider to recall solar api
@@ -248,58 +255,70 @@ export function createPVWattsListeners() {
 
     //Set up button listener to call solar api
     document.getElementById('solar-api').addEventListener('click', function() {
-        let result1;
-        let result2;
-        let result3;
-
         if (invQuant.value != 0 && batteryQuant.value != 0 ) {
-            let systemData = {
-                pvOutput: 0,
-                solarOutflow: 0,
-                amountStored: 0,
-                gridOutflow: 0,
-                genOutput: 0,
-                genDays: 0,
-                solarConsumption: 0
-            };
+            if (isSubArray()) { //Check if at least two sub array details are filled out
+                console.log("is Sub array");
+                let systemData = {
+                    pvOutput: 0,
+                    solarOutflow: 0,
+                    amountStored: 0,
+                    gridOutflow: 0,
+                    genOutput: 0,
+                    genDays: 0,
+                    solarConsumption: 0
+                };
 
-            if (document.getElementById('inp-size-array1').value !== "0" ) {
-                console.log('params run');
-                runGeoAPI().then(coords => runPVWattsAPI(null, coords, [], document.getElementById('inp-angle-array1').value, document.getElementById('inp-orientation-array1').value, document.getElementById('inp-size-array1').value)
-                .then(res => {
-                    console.log(res);
-                    updateAnnualData(systemData, res);
-                }) //Save result from  first sub array call
-                );
-            } 
-            
-            if (document.getElementById('inp-size-array2').value !== "0" ) {
-                runGeoAPI().then(coords => runPVWattsAPI(null, coords, [], document.getElementById('inp-angle-array2').value, document.getElementById('inp-orientation-array2').value, document.getElementById('inp-size-array2').value)
-                .then(res => {
-                    console.log(res);
-                    updateAnnualData(systemData, res);
-                }) //Save result from  first sub array call
-                );
+                if (document.getElementById('inp-size-array1').value !== "0" ) {
+                    console.log('params run');
+                    runGeoAPI().then(coords => runPVWattsAPI(null, coords, [], document.getElementById('inp-angle-array1').value, document.getElementById('inp-orientation-array1').value, document.getElementById('inp-size-array1').value)
+                    .then(res => {
+                        console.log(res);
+                        updateAnnualData(systemData, res);
+                        showResult(systemData);
+                        updateTableSubArrays(document.getElementById('residential-rate-inp').value);
+                        updateMonthlyTable('all', systemData, document.getElementById('residential-rate-inp').value);
+
+                    }) //Save result from  first sub array call
+                    );
+                } 
+                
+                if (document.getElementById('inp-size-array2').value !== "0" ) {
+                    runGeoAPI().then(coords => runPVWattsAPI(null, coords, [], document.getElementById('inp-angle-array2').value, document.getElementById('inp-orientation-array2').value, document.getElementById('inp-size-array2').value)
+                    .then(res => {
+                        console.log(res);
+                        updateAnnualData(systemData, res);
+                        showResult(systemData);
+                        updateTableSubArrays(document.getElementById('residential-rate-inp').value);
+                        updateMonthlyTable('all', systemData, document.getElementById('residential-rate-inp').value);
+
+                    }) //Save result from  first sub array call
+                    );
+                }
+
+                if (document.getElementById('inp-size-array3').value !== "0" ) {
+                    runGeoAPI().then(coords => runPVWattsAPI(null, coords, [], document.getElementById('inp-angle-array3').value, document.getElementById('inp-orientation-array3').value, document.getElementById('inp-size-array3').value)
+                    .then(res => {
+                        console.log(res);
+                        updateAnnualData(systemData, res);
+                        showResult(systemData);
+                        updateTableSubArrays(document.getElementById('residential-rate-inp').value);
+                        updateMonthlyTable('all', systemData, document.getElementById('residential-rate-inp').value);
+                    }) //Save result from  first sub array call
+                    );
+                }
+
+                console.log(systemData);
+                
+                
+                //setTimeout(console.log(JSON.stringify(systemData)), 5000);
+                //showResult(systemData);
             }
-
-            if (document.getElementById('inp-size-array3').value !== "0" ) {
-                runGeoAPI().then(coords => runPVWattsAPI(null, coords, [], document.getElementById('inp-angle-array3').value, document.getElementById('inp-orientation-array3').value, document.getElementById('inp-size-array3').value)
-                .then(res => {
-                    console.log(res);
-                    updateAnnualData(systemData, res);
-                }) //Save result from  first sub array call
-                );
+            //If not subarray mode run as usual
+            else {
+                runGeoAPI().then(coords => runPVWattsAPI(showResult, coords, []));
             }
-
-            console.log(systemData);
-            showResult(systemData);
-
         }
-        else {
-            //handlePVWattsOutput([]);
-            runGeoAPI([]);
-            //runPVWattsAPI(showResult);
-        }
+        
         
         
         // if (document.getElementById('inp-size-array3').value !== "0" ) {

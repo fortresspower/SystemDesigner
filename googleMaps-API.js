@@ -46,7 +46,6 @@ export function runGeoAPI(){
         return fetch(geo_root_url + geo_parameters)
         .then((response) => response.json())
         .then((responseData) => {
-        console.log(responseData);
         return responseData.results[0].geometry.location;
         })
         .catch(error => console.warn(error));

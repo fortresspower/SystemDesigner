@@ -61,9 +61,25 @@ document.getElementById('inp-azimuth').addEventListener('change', function () {
     else if (el.value < 0) { el.value = 0; }
 });
 
+//Event listeners to bound sub array tilt and orientation
+for (let i = 1; i < 4; i++) {
+    document.getElementById('inp-angle-array' + i).addEventListener('change', function () {
+        let el = document.getElementById('inp-angle-array' + i);
+        if (el.value > 90) { el.value = 90;} 
+        else if (el.value < 0) { el.value = 0; }
+    });
+    document.getElementById('inp-orientation-array' + i).addEventListener('change', function () {
+        let el = document.getElementById('inp-orientation-array' + i);
+        if (el.value > 359) { el.value = 359;} 
+        else if (el.value < 0) { el.value = 0; }
+    });
+    
+}
+
 //Add event listener to bound derate input
 document.getElementById('inp-derate').addEventListener('change', function () {
     let el = document.getElementById('inp-derate');
     if (el.value > 0.99) { el.value = 0.99;} 
     else if (el.value < -0.05) { el.value = -0.5; }
 });
+
